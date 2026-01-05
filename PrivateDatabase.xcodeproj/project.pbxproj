@@ -33,6 +33,10 @@
 		F4C9052126139A8900252736 /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C9052226139A8900252736 /* WebView.swift */; };
 		F4C9052326139A8900252737 /* RemindersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C9052426139A8900252737 /* RemindersView.swift */; };
 		F4C9052526139A8900252738 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C9052626139A8900252738 /* SettingsView.swift */; };
+		F4C9052726139A8900252739 /* ContactsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C9052826139A8900252739 /* ContactsViewModel.swift */; };
+		F4C9052926139A8900252740 /* ContactCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C9052A26139A8900252740 /* ContactCard.swift */; };
+		F4C9052B26139A8900252741 /* SampleDataGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C9052C26139A8900252741 /* SampleDataGenerator.swift */; };
+		F4C9052D26139A8900252742 /* DebugHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C9052E26139A8900252742 /* DebugHelpers.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,6 +81,10 @@
 		F4C9052226139A8900252736 /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UI/Screens/WebView.swift"; sourceTree = "<group>"; };
 		F4C9052426139A8900252737 /* RemindersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UI/Screens/RemindersView.swift"; sourceTree = "<group>"; };
 		F4C9052626139A8900252738 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UI/Screens/SettingsView.swift"; sourceTree = "<group>"; };
+		F4C9052826139A8900252739 /* ContactsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewModels/ContactsViewModel.swift"; sourceTree = "<group>"; };
+		F4C9052A26139A8900252740 /* ContactCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UI/Components/ContactCard.swift"; sourceTree = "<group>"; };
+		F4C9052C26139A8900252741 /* SampleDataGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data/SampleDataGenerator.swift"; sourceTree = "<group>"; };
+		F4C9052E26139A8900252742 /* DebugHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Debug/DebugHelpers.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin XCVersionGroup section */
@@ -142,11 +150,15 @@
 				F4C9050126139A8900252719 /* PersistenceController.swift */,
 				F4C9050E26139A8900252726 /* SharedDataManager.swift */,
 				F4C9051026139A8900252727 /* CloudKitSyncMonitor.swift */,
+				F4C9052C26139A8900252741 /* SampleDataGenerator.swift */,
+				F4C9052E26139A8900252742 /* DebugHelpers.swift */,
 				F4C9050726139A8900252722 /* ContactExtensions.swift */,
 				F4C9050926139A8900252723 /* InteractionExtensions.swift */,
+				F4C9052826139A8900252739 /* ContactsViewModel.swift */,
 				F4C9051626139A8900252730 /* GlassCard.swift */,
 				F4C9051826139A8900252731 /* GlassButton.swift */,
 				F4C9051A26139A8900252732 /* GlassBackground.swift */,
+				F4C9052A26139A8900252740 /* ContactCard.swift */,
 				F4C9051C26139A8900252733 /* Color+Glass.swift */,
 				F4C9051E26139A8900252734 /* MainTabView.swift */,
 				F4C9052026139A8900252735 /* PeopleView.swift */,
@@ -298,6 +310,10 @@
 				F4C9052126139A8900252736 /* WebView.swift in Sources */,
 				F4C9052326139A8900252737 /* RemindersView.swift in Sources */,
 				F4C9052526139A8900252738 /* SettingsView.swift in Sources */,
+				F4C9052726139A8900252739 /* ContactsViewModel.swift in Sources */,
+				F4C9052926139A8900252740 /* ContactCard.swift in Sources */,
+				F4C9052B26139A8900252741 /* SampleDataGenerator.swift in Sources */,
+				F4C9052D26139A8900252742 /* DebugHelpers.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

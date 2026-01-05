@@ -8,6 +8,8 @@ import SwiftUI
 /// Main view for the People tab showing contact list
 struct PeopleView: View {
     @EnvironmentObject var dataManager: DataManager
+    @StateObject private var viewModel = ContactsViewModel()
+    
     @State private var showingSettings = false
     @State private var showingAddContact = false
     
@@ -16,30 +18,23 @@ struct PeopleView: View {
             ZStack {
                 GlassBackground()
                 
-                VStack {
-                    // Content placeholder
-                    ScrollView {
-                        VStack(spacing: 16) {
-                            GlassCard {
-                                VStack(spacing: 12) {
-                                    Image(systemName: "person.2.fill")
-                                        .font(.system(size: 60))
-                                        .foregroundStyle(.secondary)
-                                    
-                                    Text("People")
-                                        .font(.title2)
-                                        .fontWeight(.bold)
-                                    
-                                    Text("Your contacts will appear here")
-                                        .font(.subheadline)
-                                        .foregroundStyle(.secondary)
-                                        .multilineTextAlignment(.center)
-                                }
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                            }
-                            .padding()
-                        }
+                VStack(spacing: 0) {
+                    // Search bar
+                    if !viewModel.contacts.isEmpty {
+                        SearchBar(text: $viewModel.searchText, onSearchChanged: viewModel.searchTextChanged)
+                            .padding(.horizontal)
+                            .padding(.top, 8)
+                    }
+                    
+                    // Content
+                    if viewModel.isLoading {
+                        loadingView
+                    } else if let errorMessage = viewModel.errorMessage {
+                        errorView(message: errorMessage)
+                    } else if viewModel.contacts.isEmpty {
+                        emptyStateView
+                    } else {
+                        contactListView
                     }
                 }
             }
@@ -86,7 +81,173 @@ struct PeopleView: View {
                 Text("Add Contact (Coming in Prompt 5)")
                     .presentationDetents([.medium])
             }
+            .task {
+                await viewModel.loadContacts()
+            }
         }
+    }
+    
+    // MARK: - Contact List View
+    
+    private var contactListView: some View {
+        ScrollView {
+            LazyVStack(spacing: 12) {
+                ForEach(viewModel.filteredContacts) { contact in
+                    Button {
+                        // Navigate to detail (Prompt 5)
+                    } label: {
+                        ContactCard(contact: contact)
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+            .padding()
+        }
+        .refreshable {
+            await viewModel.refreshContacts()
+        }
+    }
+    
+    // MARK: - Empty State View
+    
+    private var emptyStateView: some View {
+        ScrollView {
+            VStack(spacing: 16) {
+                GlassCard {
+                    VStack(spacing: 12) {
+                        Image(systemName: "person.2.fill")
+                            .font(.system(size: 60))
+                            .foregroundStyle(.secondary)
+                        
+                        Text("No Contacts Yet")
+                            .font(.title2)
+                            .fontWeight(.bold)
+                        
+                        Text("Add your first contact to start building your network")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                            .multilineTextAlignment(.center)
+                        
+                        Button {
+                            showingAddContact = true
+                        } label: {
+                            HStack {
+                                Image(systemName: "plus.circle.fill")
+                                Text("Add Contact")
+                            }
+                            .font(.headline)
+                            .foregroundStyle(.white)
+                            .padding(.horizontal, 24)
+                            .padding(.vertical, 12)
+                            .background(Color.glassBlue)
+                            .clipShape(Capsule())
+                        }
+                        .padding(.top, 8)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                }
+                .padding()
+            }
+        }
+    }
+    
+    // MARK: - Loading View
+    
+    private var loadingView: some View {
+        VStack {
+            ProgressView()
+                .scaleEffect(1.5)
+                .tint(Color.glassBlue)
+            
+            Text("Loading contacts...")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                .padding(.top, 16)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+    
+    // MARK: - Error View
+    
+    private func errorView(message: String) -> some View {
+        ScrollView {
+            VStack(spacing: 16) {
+                GlassCard {
+                    VStack(spacing: 12) {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .font(.system(size: 50))
+                            .foregroundStyle(.orange)
+                        
+                        Text("Error")
+                            .font(.title2)
+                            .fontWeight(.bold)
+                        
+                        Text(message)
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                            .multilineTextAlignment(.center)
+                        
+                        Button {
+                            Task {
+                                await viewModel.loadContacts()
+                            }
+                        } label: {
+                            HStack {
+                                Image(systemName: "arrow.clockwise")
+                                Text("Retry")
+                            }
+                            .font(.headline)
+                            .foregroundStyle(.white)
+                            .padding(.horizontal, 24)
+                            .padding(.vertical, 12)
+                            .background(Color.glassBlue)
+                            .clipShape(Capsule())
+                        }
+                        .padding(.top, 8)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                }
+                .padding()
+            }
+        }
+    }
+}
+
+// MARK: - Search Bar
+
+struct SearchBar: View {
+    @Binding var text: String
+    let onSearchChanged: (String) -> Void
+    
+    var body: some View {
+        HStack(spacing: 12) {
+            Image(systemName: "magnifyingglass")
+                .foregroundStyle(.secondary)
+            
+            TextField("Search contacts...", text: $text)
+                .textFieldStyle(.plain)
+                .onChange(of: text) { newValue in
+                    onSearchChanged(newValue)
+                }
+            
+            if !text.isEmpty {
+                Button {
+                    text = ""
+                    onSearchChanged("")
+                } label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundStyle(.secondary)
+                }
+            }
+        }
+        .padding(12)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                .stroke(.white.opacity(0.2), lineWidth: 1)
+        )
     }
 }
 

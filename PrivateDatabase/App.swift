@@ -16,6 +16,15 @@ struct CirclesApp: App {
     // Initialize view model for CloudKit tests
     @StateObject private var viewModel = ViewModel()
     
+    init() {
+        #if DEBUG
+        // Add sample data for development
+        Task { @MainActor in
+            await DebugHelpers.addSampleContactsIfNeeded()
+        }
+        #endif
+    }
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
