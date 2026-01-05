@@ -63,10 +63,14 @@ final class DataManagerTests: XCTestCase {
     
     func testDeleteContact() async throws {
         let contact = try await dataManager.createContact(name: "David", relationshipType: "Acquaintance")
+        guard let contactId = contact.id else {
+            XCTFail("Created contact should have an ID")
+            return
+        }
         
         try await dataManager.deleteContact(contact)
         
-        let fetched = await dataManager.fetchContact(id: contact.id!)
+        let fetched = await dataManager.fetchContact(id: contactId)
         XCTAssertNil(fetched)
     }
     
