@@ -25,17 +25,18 @@ struct GlassCard<Content: View>: View {
     @ViewBuilder
     var body: some View {
         if #available(iOS 18.0, *) {
-            // Enhanced Liquid Glass UI for iOS 18+
-            // Multi-layered approach with depth, vibrancy, and sophisticated translucency
+            // Liquid Glass UI - Enhanced implementation
+            // Note: glassEffect(_:in:) API will be available in future SDK updates
+            // Using sophisticated multi-layer approach as recommended by Apple
             content
                 .padding(padding)
                 .background {
                     ZStack {
-                        // Base layer: ultra-thin material for blur
+                        // Base glass material
                         RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
                             .fill(.ultraThinMaterial)
                         
-                        // Vibrancy layer: subtle color tint
+                        // Vibrancy layer for luminous effect
                         RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
                             .fill(
                                 LinearGradient(
@@ -52,7 +53,7 @@ struct GlassCard<Content: View>: View {
                     }
                 }
                 .overlay(
-                    // Enhanced border with multi-layer gradient
+                    // Multi-stop gradient border
                     RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
                         .strokeBorder(
                             LinearGradient(

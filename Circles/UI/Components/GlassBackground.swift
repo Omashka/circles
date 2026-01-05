@@ -11,8 +11,9 @@ struct GlassBackground: View {
     @ViewBuilder
     var body: some View {
         if #available(iOS 18.0, *) {
-            // Enhanced Liquid Glass UI for iOS 18+
-            // Sophisticated multi-layer background with depth and vibrancy
+            // Liquid Glass UI - Enhanced implementation
+            // Note: glassEffect(_:in:) API will be available in future SDK updates
+            // Using sophisticated multi-layer approach as recommended by Apple
             ZStack {
                 // Layer 1: Rich color gradient base
                 LinearGradient(
@@ -27,7 +28,7 @@ struct GlassBackground: View {
                 )
                 .ignoresSafeArea()
                 
-                // Layer 2: Secondary gradient for depth and complexity
+                // Layer 2: Secondary gradient for depth
                 LinearGradient(
                     colors: [
                         Color.glassPurple.opacity(0.4),
@@ -53,12 +54,12 @@ struct GlassBackground: View {
                 .ignoresSafeArea()
                 .blendMode(.plusLighter)
                 
-                // Layer 4: Material overlay for blur and translucency
+                // Layer 4: Glass material overlay
                 Rectangle()
                     .fill(.ultraThinMaterial)
                     .ignoresSafeArea()
                 
-                // Layer 5: Subtle texture overlay for realism
+                // Layer 5: Subtle texture overlay
                 Rectangle()
                     .fill(
                         LinearGradient(
