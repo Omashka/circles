@@ -19,13 +19,6 @@ struct PeopleView: View {
                 GlassBackground()
                 
                 VStack(spacing: 0) {
-                    // Search bar
-                    if !viewModel.contacts.isEmpty {
-                        SearchBar(text: $viewModel.searchText, onSearchChanged: viewModel.searchTextChanged)
-                            .padding(.horizontal)
-                            .padding(.top, 8)
-                    }
-                    
                     // Content
                     if viewModel.isLoading {
                         loadingView
@@ -39,38 +32,29 @@ struct PeopleView: View {
                 }
             }
             .navigationTitle("People")
+            .navigationBarTitleDisplayMode(.large)
+            .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        showingSettings = true
-                    } label: {
-                        Image(systemName: "gearshape.fill")
-                            .font(.title3)
-                            .foregroundStyle(.secondary)
-                            .padding(8)
-                            .background(.ultraThinMaterial)
-                            .clipShape(Circle())
-                            .overlay(
-                                Circle()
-                                    .stroke(.white.opacity(0.2), lineWidth: 1)
-                            )
-                    }
-                }
-                
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        showingAddContact = true
-                    } label: {
-                        Image(systemName: "plus")
-                            .font(.title3)
-                            .foregroundStyle(.primary)
-                            .padding(8)
-                            .background(.ultraThinMaterial)
-                            .clipShape(Circle())
-                            .overlay(
-                                Circle()
-                                    .stroke(.white.opacity(0.2), lineWidth: 1)
-                            )
+                    HStack(spacing: 12) {
+                        // Settings button
+                        Button {
+                            showingSettings = true
+                        } label: {
+                            Image(systemName: "gearshape.fill")
+                                .font(.system(size: 18, weight: .medium))
+                                .foregroundStyle(.secondary)
+                        }
+                        
+                        // Add contact button
+                        Button {
+                            showingAddContact = true
+                        } label: {
+                            Image(systemName: "plus.circle.fill")
+                                .font(.system(size: 22, weight: .medium))
+                                .foregroundStyle(Color.glassBlue)
+                        }
                     }
                 }
             }
@@ -91,17 +75,25 @@ struct PeopleView: View {
     
     private var contactListView: some View {
         ScrollView {
-            LazyVStack(spacing: 12) {
-                ForEach(viewModel.filteredContacts) { contact in
-                    Button {
-                        // Navigate to detail (Prompt 5)
-                    } label: {
-                        ContactCard(contact: contact)
+            LazyVStack(spacing: 0) {
+                // Search bar in scroll view for better Liquid Glass integration
+                SearchBar(text: $viewModel.searchText, onSearchChanged: viewModel.searchTextChanged)
+                    .padding()
+                
+                // Contact cards
+                LazyVStack(spacing: 12) {
+                    ForEach(viewModel.filteredContacts) { contact in
+                        Button {
+                            // Navigate to detail (Prompt 5)
+                        } label: {
+                            ContactCard(contact: contact)
+                        }
+                        .buttonStyle(.plain)
                     }
-                    .buttonStyle(.plain)
                 }
+                .padding(.horizontal)
+                .padding(.bottom)
             }
-            .padding()
         }
         .refreshable {
             await viewModel.refreshContacts()
@@ -224,10 +216,12 @@ struct SearchBar: View {
     var body: some View {
         HStack(spacing: 12) {
             Image(systemName: "magnifyingglass")
+                .font(.system(size: 16, weight: .medium))
                 .foregroundStyle(.secondary)
             
             TextField("Search contacts...", text: $text)
                 .textFieldStyle(.plain)
+                .font(.body)
                 .onChange(of: text) { newValue in
                     onSearchChanged(newValue)
                 }
@@ -238,16 +232,54 @@ struct SearchBar: View {
                     onSearchChanged("")
                 } label: {
                     Image(systemName: "xmark.circle.fill")
-                        .foregroundStyle(.secondary)
+                        .font(.system(size: 16))
+                        .foregroundColor(.secondary.opacity(0.6))
                 }
+                .transition(.scale.combined(with: .opacity))
             }
         }
-        .padding(12)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
+        .background {
+            if #available(iOS 18.0, *) {
+                // Enhanced glass search bar for iOS 18+
+                ZStack {
+                    RoundedRectangle(cornerRadius: 14, style: .continuous)
+                        .fill(.ultraThinMaterial)
+                    
+                    RoundedRectangle(cornerRadius: 14, style: .continuous)
+                        .fill(
+                            LinearGradient(
+                                colors: [
+                                    .white.opacity(0.08),
+                                    .clear
+                                ],
+                                startPoint: .top,
+                                endPoint: .bottom
+                            )
+                        )
+                }
+            } else {
+                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                    .fill(.ultraThinMaterial)
+            }
+        }
         .overlay(
-            RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .stroke(.white.opacity(0.2), lineWidth: 1)
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                .strokeBorder(
+                    LinearGradient(
+                        colors: [
+                            .white.opacity(0.3),
+                            .white.opacity(0.1)
+                        ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    ),
+                    lineWidth: 1
+                )
         )
+        .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
+        .animation(.easeInOut(duration: 0.2), value: text.isEmpty)
     }
 }
 
