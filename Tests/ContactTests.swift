@@ -5,7 +5,7 @@
 
 import XCTest
 import CoreData
-@testable import PrivateDatabase
+@testable import Circles
 
 final class ContactTests: XCTestCase {
     var persistence: PersistenceController!

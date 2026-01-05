@@ -5,7 +5,7 @@
 
 import XCTest
 import CoreData
-@testable import PrivateDatabase
+@testable import Circles
 
 @MainActor
 final class DataManagerTests: XCTestCase {

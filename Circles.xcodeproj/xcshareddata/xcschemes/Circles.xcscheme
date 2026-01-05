@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "89EAB87425880274004264D2"
-               BuildableName = "PrivateDatabase.app"
-               BlueprintName = "PrivateDatabase"
-               ReferencedContainer = "container:PrivateDatabase.xcodeproj">
+               BuildableName = "Circles.app"
+               BlueprintName = "Circles"
+               ReferencedContainer = "container:Circles.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "89EAB88525880278004264D2"
-               BuildableName = "PrivateDatabaseTests.xctest"
-               BlueprintName = "PrivateDatabaseTests"
-               ReferencedContainer = "container:PrivateDatabase.xcodeproj">
+               BuildableName = "CirclesTests.xctest"
+               BlueprintName = "CirclesTests"
+               ReferencedContainer = "container:Circles.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "89EAB87425880274004264D2"
-            BuildableName = "PrivateDatabase.app"
-            BlueprintName = "PrivateDatabase"
-            ReferencedContainer = "container:PrivateDatabase.xcodeproj">
+            BuildableName = "Circles.app"
+            BlueprintName = "Circles"
+            ReferencedContainer = "container:Circles.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "89EAB87425880274004264D2"
-            BuildableName = "PrivateDatabase.app"
-            BlueprintName = "PrivateDatabase"
-            ReferencedContainer = "container:PrivateDatabase.xcodeproj">
+            BuildableName = "Circles.app"
+            BlueprintName = "Circles"
+            ReferencedContainer = "container:Circles.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

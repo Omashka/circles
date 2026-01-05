@@ -6,7 +6,7 @@
 import XCTest
 import CoreData
 import Combine
-@testable import PrivateDatabase
+@testable import Circles
 
 @MainActor
 final class CloudKitSyncMonitorTests: XCTestCase {

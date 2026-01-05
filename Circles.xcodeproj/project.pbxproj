@@ -52,12 +52,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		89EAB87525880274004264D2 /* PrivateDatabase.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PrivateDatabase.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		89EAB87525880274004264D2 /* Circles.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Circles.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		89EAB87825880274004264D2 /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		89EAB87A25880274004264D2 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		89EAB87C25880278004264D2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		89EAB88125880278004264D2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		89EAB88625880278004264D2 /* PrivateDatabaseTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PrivateDatabaseTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		89EAB88625880278004264D2 /* CirclesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CirclesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		89EAB88C25880278004264D2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		89EAB8A625880296004264D2 /* App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = App.entitlements; sourceTree = "<group>"; };
 		89EAB8A82588029F004264D2 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
@@ -126,7 +126,7 @@
 		89EAB86C25880274004264D2 = {
 			isa = PBXGroup;
 			children = (
-				89EAB87725880274004264D2 /* PrivateDatabase */,
+				89EAB87725880274004264D2 /* Circles */,
 				89EAB88925880278004264D2 /* Tests */,
 				89EAB87625880274004264D2 /* Products */,
 				89EAB8A72588029F004264D2 /* Frameworks */,
@@ -136,13 +136,13 @@
 		89EAB87625880274004264D2 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				89EAB87525880274004264D2 /* PrivateDatabase.app */,
-				89EAB88625880278004264D2 /* PrivateDatabaseTests.xctest */,
+				89EAB87525880274004264D2 /* Circles.app */,
+				89EAB88625880278004264D2 /* CirclesTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		89EAB87725880274004264D2 /* PrivateDatabase */ = {
+		89EAB87725880274004264D2 /* Circles */ = {
 			isa = PBXGroup;
 			children = (
 				89EAB8A625880296004264D2 /* App.entitlements */,
@@ -173,7 +173,7 @@
 				89EAB87C25880278004264D2 /* Assets.xcassets */,
 				89EAB88125880278004264D2 /* Info.plist */,
 			);
-			path = PrivateDatabase;
+			path = Circles;
 			sourceTree = "<group>";
 		};
 		89EAB88925880278004264D2 /* Tests */ = {
@@ -201,9 +201,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		89EAB87425880274004264D2 /* PrivateDatabase */ = {
+		89EAB87425880274004264D2 /* Circles */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 89EAB89A25880278004264D2 /* Build configuration list for PBXNativeTarget "PrivateDatabase" */;
+			buildConfigurationList = 89EAB89A25880278004264D2 /* Build configuration list for PBXNativeTarget "Circles" */;
 			buildPhases = (
 				89EAB87125880274004264D2 /* Sources */,
 				89EAB87225880274004264D2 /* Frameworks */,
@@ -213,14 +213,14 @@
 			);
 			dependencies = (
 			);
-			name = PrivateDatabase;
-			productName = PrivateDatabase;
-			productReference = 89EAB87525880274004264D2 /* PrivateDatabase.app */;
+			name = Circles;
+			productName = Circles;
+			productReference = 89EAB87525880274004264D2 /* Circles.app */;
 			productType = "com.apple.product-type.application";
 		};
-		89EAB88525880278004264D2 /* PrivateDatabaseTests */ = {
+		89EAB88525880278004264D2 /* CirclesTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 89EAB89D25880278004264D2 /* Build configuration list for PBXNativeTarget "PrivateDatabaseTests" */;
+			buildConfigurationList = 89EAB89D25880278004264D2 /* Build configuration list for PBXNativeTarget "CirclesTests" */;
 			buildPhases = (
 				89EAB88225880278004264D2 /* Sources */,
 				89EAB88325880278004264D2 /* Frameworks */,
@@ -231,9 +231,9 @@
 			dependencies = (
 				89EAB88825880278004264D2 /* PBXTargetDependency */,
 			);
-			name = PrivateDatabaseTests;
-			productName = PrivateDatabaseTests;
-			productReference = 89EAB88625880278004264D2 /* PrivateDatabaseTests.xctest */;
+			name = CirclesTests;
+			productName = CirclesTests;
+			productReference = 89EAB88625880278004264D2 /* CirclesTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -254,7 +254,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 89EAB87025880274004264D2 /* Build configuration list for PBXProject "PrivateDatabase" */;
+			buildConfigurationList = 89EAB87025880274004264D2 /* Build configuration list for PBXProject "Circles" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -267,8 +267,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				89EAB87425880274004264D2 /* PrivateDatabase */,
-				89EAB88525880278004264D2 /* PrivateDatabaseTests */,
+				89EAB87425880274004264D2 /* Circles */,
+				89EAB88525880278004264D2 /* CirclesTests */,
 			);
 		};
 /* End PBXProject section */
@@ -341,7 +341,7 @@
 /* Begin PBXTargetDependency section */
 		89EAB88825880278004264D2 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 89EAB87425880274004264D2 /* PrivateDatabase */;
+			target = 89EAB87425880274004264D2 /* Circles */;
 			targetProxy = 89EAB88725880278004264D2 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -468,17 +468,17 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = PrivateDatabase/App.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Circles/App.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = NO;
-				INFOPLIST_FILE = PrivateDatabase/Info.plist;
+				INFOPLIST_FILE = Circles/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.example.private-database";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.example.circles";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -490,17 +490,17 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = PrivateDatabase/App.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Circles/App.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = NO;
-				INFOPLIST_FILE = PrivateDatabase/Info.plist;
+				INFOPLIST_FILE = Circles/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.example.private-database";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.example.circles";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -520,11 +520,11 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.example.private-database";
-				PRODUCT_NAME = PrivateDatabaseTests;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.example.circles";
+				PRODUCT_NAME = CirclesTests;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PrivateDatabase.app/PrivateDatabase";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Circles.app/Circles";
 			};
 			name = Debug;
 		};
@@ -541,18 +541,18 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.example.private-database";
-				PRODUCT_NAME = PrivateDatabaseTests;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.example.circles";
+				PRODUCT_NAME = CirclesTests;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PrivateDatabase.app/PrivateDatabase";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Circles.app/Circles";
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		89EAB87025880274004264D2 /* Build configuration list for PBXProject "PrivateDatabase" */ = {
+		89EAB87025880274004264D2 /* Build configuration list for PBXProject "Circles" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				89EAB89825880278004264D2 /* Debug */,
@@ -561,7 +561,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		89EAB89A25880278004264D2 /* Build configuration list for PBXNativeTarget "PrivateDatabase" */ = {
+		89EAB89A25880278004264D2 /* Build configuration list for PBXNativeTarget "Circles" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				89EAB89B25880278004264D2 /* Debug */,
@@ -570,7 +570,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		89EAB89D25880278004264D2 /* Build configuration list for PBXNativeTarget "PrivateDatabaseTests" */ = {
+		89EAB89D25880278004264D2 /* Build configuration list for PBXNativeTarget "CirclesTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				89EAB89E25880278004264D2 /* Debug */,
