@@ -25,19 +25,42 @@ struct GlassCard<Content: View>: View {
     @ViewBuilder
     var body: some View {
         if #available(iOS 18.0, *) {
-            // Liquid Glass UI for iOS 18+
-            // Note: .liquidGlass requires iOS 18+ and may need Xcode beta
-            // Using enhanced ultraThinMaterial as fallback until API is available
+            // Enhanced Liquid Glass UI for iOS 18+
+            // Multi-layered approach with depth, vibrancy, and sophisticated translucency
             content
                 .padding(padding)
-                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
+                .background {
+                    ZStack {
+                        // Base layer: ultra-thin material for blur
+                        RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                            .fill(.ultraThinMaterial)
+                        
+                        // Vibrancy layer: subtle color tint
+                        RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                            .fill(
+                                LinearGradient(
+                                    colors: [
+                                        .white.opacity(0.15),
+                                        .white.opacity(0.05),
+                                        .clear
+                                    ],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                )
+                            )
+                            .blendMode(.plusLighter)
+                    }
+                }
                 .overlay(
+                    // Enhanced border with multi-layer gradient
                     RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                        .stroke(
+                        .strokeBorder(
                             LinearGradient(
                                 colors: [
-                                    .white.opacity(0.4),
-                                    .white.opacity(0.15)
+                                    .white.opacity(0.6),
+                                    .white.opacity(0.3),
+                                    .white.opacity(0.1),
+                                    .clear
                                 ],
                                 startPoint: .topLeading,
                                 endPoint: .bottomTrailing
@@ -45,8 +68,25 @@ struct GlassCard<Content: View>: View {
                             lineWidth: 1.5
                         )
                 )
-                .shadow(color: .black.opacity(0.2), radius: 20, x: 0, y: 10)
-                .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
+                .overlay(
+                    // Inner glow for depth
+                    RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                        .inset(by: 1)
+                        .stroke(
+                            LinearGradient(
+                                colors: [
+                                    .white.opacity(0.2),
+                                    .clear
+                                ],
+                                startPoint: .top,
+                                endPoint: .bottom
+                            ),
+                            lineWidth: 0.5
+                        )
+                )
+                .shadow(color: .black.opacity(0.25), radius: 30, x: 0, y: 15)
+                .shadow(color: .black.opacity(0.15), radius: 10, x: 0, y: 5)
+                .shadow(color: .white.opacity(0.5), radius: 1, x: 0, y: -1)
         } else {
             // Fallback to standard glassmorphism for iOS 16-17
             content

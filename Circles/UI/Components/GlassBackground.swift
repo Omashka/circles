@@ -11,38 +11,66 @@ struct GlassBackground: View {
     @ViewBuilder
     var body: some View {
         if #available(iOS 18.0, *) {
-            // Liquid Glass UI for iOS 18+
+            // Enhanced Liquid Glass UI for iOS 18+
+            // Sophisticated multi-layer background with depth and vibrancy
             ZStack {
-                // Base gradient - vibrant colors for Liquid Glass
+                // Layer 1: Rich color gradient base
                 LinearGradient(
                     colors: [
-                        Color.glassBlue.opacity(0.5),
-                        Color.glassPurple.opacity(0.4),
-                        Color.glassTeal.opacity(0.35),
-                        Color.glassBlue.opacity(0.4)
+                        Color.glassBlue.opacity(0.6),
+                        Color.glassPurple.opacity(0.5),
+                        Color.glassTeal.opacity(0.45),
+                        Color.glassBlue.opacity(0.5)
                     ],
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
                 )
                 .ignoresSafeArea()
                 
-                // Additional gradient layer for depth
+                // Layer 2: Secondary gradient for depth and complexity
                 LinearGradient(
                     colors: [
-                        Color.glassPurple.opacity(0.3),
-                        Color.glassBlue.opacity(0.2)
+                        Color.glassPurple.opacity(0.4),
+                        Color.clear,
+                        Color.glassTeal.opacity(0.3)
                     ],
                     startPoint: .topTrailing,
                     endPoint: .bottomLeading
                 )
                 .ignoresSafeArea()
-                .blur(radius: 100)
+                .blur(radius: 120)
                 
-                // Liquid Glass material overlay
-                // Note: .liquidGlass requires iOS 18+ and may need Xcode beta
-                // Using enhanced ultraThinMaterial as fallback until API is available
+                // Layer 3: Radial accent for focal point
+                RadialGradient(
+                    colors: [
+                        Color.white.opacity(0.15),
+                        Color.clear
+                    ],
+                    center: .topLeading,
+                    startRadius: 0,
+                    endRadius: 500
+                )
+                .ignoresSafeArea()
+                .blendMode(.plusLighter)
+                
+                // Layer 4: Material overlay for blur and translucency
                 Rectangle()
                     .fill(.ultraThinMaterial)
+                    .ignoresSafeArea()
+                
+                // Layer 5: Subtle texture overlay for realism
+                Rectangle()
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                .white.opacity(0.02),
+                                .clear,
+                                .black.opacity(0.02)
+                            ],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
                     .ignoresSafeArea()
             }
         } else {
