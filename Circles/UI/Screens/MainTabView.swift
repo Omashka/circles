@@ -6,6 +6,8 @@
 import SwiftUI
 
 /// Main tab navigation container for the app
+/// Follows Apple's Liquid Glass tab bar guidelines:
+/// https://developer.apple.com/design/Human-Interface-Guidelines/tab-bars
 struct MainTabView: View {
     @State private var selectedTab = 0
     
@@ -33,22 +35,11 @@ struct MainTabView: View {
                 .tag(2)
         }
         .tint(Color.glassBlue)
-        .onAppear {
-            // Apply Liquid Glass styling to tab bar
-            let appearance = UITabBarAppearance()
-            appearance.configureWithTransparentBackground()
-            
-            // Use ultra-thin material for glass effect
-            appearance.backgroundColor = UIColor.systemBackground.withAlphaComponent(0.01)
-            
-            // Apply blur effect
-            let blurEffect = UIBlurEffect(style: .systemUltraThinMaterial)
-            let blurView = UIVisualEffectView(effect: blurEffect)
-            appearance.backgroundEffect = blurEffect
-            
-            UITabBar.appearance().standardAppearance = appearance
-            UITabBar.appearance().scrollEdgeAppearance = appearance
-        }
+        // Apply Liquid Glass background to tab bar per Apple HIG:
+        // "A tab bar floats above content at the bottom of the screen."
+        // "Its items rest on a Liquid Glass background that allows content beneath to peek through"
+        .toolbarBackground(.ultraThinMaterial, for: .tabBar)
+        .toolbarBackground(.visible, for: .tabBar)
     }
 }
 

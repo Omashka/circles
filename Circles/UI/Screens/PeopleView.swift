@@ -75,25 +75,17 @@ struct PeopleView: View {
     
     private var contactListView: some View {
         ScrollView {
-            LazyVStack(spacing: 0) {
-                // Search bar in scroll view for better Liquid Glass integration
-                SearchBar(text: $viewModel.searchText, onSearchChanged: viewModel.searchTextChanged)
-                    .padding()
-                
-                // Contact cards
-                LazyVStack(spacing: 12) {
-                    ForEach(viewModel.filteredContacts) { contact in
-                        Button {
-                            // Navigate to detail (Prompt 5)
-                        } label: {
-                            ContactCard(contact: contact)
-                        }
-                        .buttonStyle(.plain)
+            LazyVStack(spacing: 12) {
+                ForEach(viewModel.filteredContacts) { contact in
+                    Button {
+                        // Navigate to detail (Prompt 5)
+                    } label: {
+                        ContactCard(contact: contact)
                     }
+                    .buttonStyle(.plain)
                 }
-                .padding(.horizontal)
-                .padding(.bottom)
             }
+            .padding()
         }
         .refreshable {
             await viewModel.refreshContacts()
