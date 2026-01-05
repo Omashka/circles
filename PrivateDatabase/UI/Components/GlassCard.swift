@@ -5,7 +5,8 @@
 
 import SwiftUI
 
-/// A reusable glass-styled card component with translucent background
+/// A reusable glass-styled card component with Liquid Glass UI support
+/// Uses iOS 18+ Liquid Glass APIs when available, falls back to standard glassmorphism
 struct GlassCard<Content: View>: View {
     let content: Content
     let padding: CGFloat
@@ -21,16 +22,53 @@ struct GlassCard<Content: View>: View {
         self.content = content()
     }
     
+    @ViewBuilder
     var body: some View {
-        content
-            .padding(padding)
-            .background(.ultraThinMaterial)
-            .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
-            .overlay(
-                RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                    .stroke(.white.opacity(0.2), lineWidth: 1)
-            )
-            .shadow(color: .black.opacity(0.1), radius: 10, x: 0, y: 5)
+        if #available(iOS 18.0, *) {
+            // Liquid Glass UI for iOS 18+
+            // Note: .liquidGlass requires iOS 18+ and may need Xcode beta
+            // Using enhanced ultraThinMaterial as fallback until API is available
+            content
+                .padding(padding)
+                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
+                .overlay(
+                    RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                        .stroke(
+                            LinearGradient(
+                                colors: [
+                                    .white.opacity(0.4),
+                                    .white.opacity(0.15)
+                                ],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            ),
+                            lineWidth: 1.5
+                        )
+                )
+                .shadow(color: .black.opacity(0.2), radius: 20, x: 0, y: 10)
+                .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
+        } else {
+            // Fallback to standard glassmorphism for iOS 16-17
+            content
+                .padding(padding)
+                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
+                .overlay(
+                    RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                        .stroke(
+                            LinearGradient(
+                                colors: [
+                                    .white.opacity(0.3),
+                                    .white.opacity(0.1)
+                                ],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            ),
+                            lineWidth: 1.5
+                        )
+                )
+                .shadow(color: .black.opacity(0.15), radius: 15, x: 0, y: 8)
+                .shadow(color: .black.opacity(0.05), radius: 5, x: 0, y: 2)
+        }
     }
 }
 

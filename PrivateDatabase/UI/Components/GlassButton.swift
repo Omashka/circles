@@ -28,6 +28,7 @@ struct GlassButton: View {
         self.size = size
     }
     
+    @ViewBuilder
     var body: some View {
         Button(action: action) {
             HStack(spacing: 8) {
@@ -44,13 +45,42 @@ struct GlassButton: View {
             .padding(.horizontal, size.horizontalPadding)
             .padding(.vertical, size.verticalPadding)
             .frame(maxWidth: .infinity)
-            .background(style.backgroundColor)
+            .background(backgroundMaterialForStyle)
             .clipShape(RoundedRectangle(cornerRadius: size.cornerRadius, style: .continuous))
             .overlay(
                 RoundedRectangle(cornerRadius: size.cornerRadius, style: .continuous)
                     .stroke(style.borderColor, lineWidth: 1)
             )
             .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
+        }
+    }
+    
+    private var backgroundMaterialForStyle: AnyShapeStyle {
+        if #available(iOS 18.0, *) {
+            // Liquid Glass UI for iOS 18+
+            // Note: .liquidGlass requires iOS 18+ and may need Xcode beta
+            // Using enhanced ultraThinMaterial as fallback until API is available
+            switch style {
+            case .primary:
+                return AnyShapeStyle(.ultraThinMaterial)
+            case .secondary:
+                return AnyShapeStyle(.thinMaterial)
+            case .destructive:
+                return AnyShapeStyle(.red.opacity(0.2))
+            case .ghost:
+                return AnyShapeStyle(.clear)
+            }
+        } else {
+            switch style {
+            case .primary:
+                return AnyShapeStyle(.ultraThinMaterial)
+            case .secondary:
+                return AnyShapeStyle(.thinMaterial)
+            case .destructive:
+                return AnyShapeStyle(.red.opacity(0.2))
+            case .ghost:
+                return AnyShapeStyle(.clear)
+            }
         }
     }
 }
@@ -64,18 +94,6 @@ extension GlassButton {
         case destructive
         case ghost
         
-        var backgroundColor: AnyShapeStyle {
-            switch self {
-            case .primary:
-                return AnyShapeStyle(.ultraThinMaterial)
-            case .secondary:
-                return AnyShapeStyle(.thinMaterial)
-            case .destructive:
-                return AnyShapeStyle(.red.opacity(0.2))
-            case .ghost:
-                return AnyShapeStyle(.clear)
-            }
-        }
         
         var foregroundColor: Color {
             switch self {
