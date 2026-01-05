@@ -1,16 +1,23 @@
 //
-//  PrivateDatabaseApp.swift
-//  (cloudkit-samples) private-database
+//  CirclesApp.swift
+//  Circles
 //
 
 import SwiftUI
 
 @main
-struct PrivateDatabaseApp: App {
+struct CirclesApp: App {
+    // Initialize persistence controller
+    let persistenceController = PersistenceController.shared
+    
+    // Initialize data manager
+    @StateObject private var dataManager = DataManager()
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environmentObject(ViewModel())
+                .environment(\.managedObjectContext, persistenceController.viewContext)
+                .environmentObject(dataManager)
         }
     }
 }
