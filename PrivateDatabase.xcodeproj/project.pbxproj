@@ -37,6 +37,8 @@
 		F4C9052926139A8900252740 /* ContactCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C9052A26139A8900252740 /* ContactCard.swift */; };
 		F4C9052B26139A8900252741 /* SampleDataGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C9052C26139A8900252741 /* SampleDataGenerator.swift */; };
 		F4C9052D26139A8900252742 /* DebugHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C9052E26139A8900252742 /* DebugHelpers.swift */; };
+		F4C9052F26139A8900252743 /* ContactsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C9053026139A8900252743 /* ContactsViewModelTests.swift */; };
+		F4C9053126139A8900252744 /* SampleDataGeneratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C9053226139A8900252744 /* SampleDataGeneratorTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,6 +74,8 @@
 		F4C9051026139A8900252727 /* CloudKitSyncMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data/CloudKitSyncMonitor.swift"; sourceTree = "<group>"; };
 		F4C9051226139A8900252728 /* CloudKitSyncMonitorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitSyncMonitorTests.swift; sourceTree = "<group>"; };
 		F4C9051426139A8900252729 /* SharedDataManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedDataManagerTests.swift; sourceTree = "<group>"; };
+		F4C9053026139A8900252743 /* ContactsViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsViewModelTests.swift; sourceTree = "<group>"; };
+		F4C9053226139A8900252744 /* SampleDataGeneratorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleDataGeneratorTests.swift; sourceTree = "<group>"; };
 		F4C9051626139A8900252730 /* GlassCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UI/Components/GlassCard.swift"; sourceTree = "<group>"; };
 		F4C9051826139A8900252731 /* GlassButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UI/Components/GlassButton.swift"; sourceTree = "<group>"; };
 		F4C9051A26139A8900252732 /* GlassBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UI/Components/GlassBackground.swift"; sourceTree = "<group>"; };
@@ -179,6 +183,8 @@
 				F4C9050526139A8900252721 /* DataManagerTests.swift */,
 				F4C9051226139A8900252728 /* CloudKitSyncMonitorTests.swift */,
 				F4C9051426139A8900252729 /* SharedDataManagerTests.swift */,
+				F4C9053026139A8900252743 /* ContactsViewModelTests.swift */,
+				F4C9053226139A8900252744 /* SampleDataGeneratorTests.swift */,
 				89EAB88C25880278004264D2 /* Info.plist */,
 			);
 			path = Tests;
@@ -325,6 +331,8 @@
 				F4C9050426139A8900252721 /* DataManagerTests.swift in Sources */,
 				F4C9051126139A8900252728 /* CloudKitSyncMonitorTests.swift in Sources */,
 				F4C9051326139A8900252729 /* SharedDataManagerTests.swift in Sources */,
+				F4C9052F26139A8900252743 /* ContactsViewModelTests.swift in Sources */,
+				F4C9053126139A8900252744 /* SampleDataGeneratorTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
