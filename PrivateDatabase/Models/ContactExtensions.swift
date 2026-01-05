@@ -49,20 +49,20 @@ extension Contact {
     
     /// Array of interests (convenience accessor)
     var interestsArray: [String] {
-        get { interests as? [String] ?? [] }
-        set { interests = newValue as NSObject }
+        get { (interests as? [String]) ?? [String]() }
+        set { interests = newValue as NSArray }
     }
     
     /// Array of religious events (convenience accessor)
     var religiousEventsArray: [String] {
-        get { religiousEvents as? [String] ?? [] }
-        set { religiousEvents = newValue as NSObject }
+        get { (religiousEvents as? [String]) ?? [String]() }
+        set { religiousEvents = newValue as NSArray }
     }
     
     /// Array of topics to avoid (convenience accessor)
     var topicsToAvoidArray: [String] {
-        get { topicsToAvoid as? [String] ?? [] }
-        set { topicsToAvoid = newValue as NSObject }
+        get { (topicsToAvoid as? [String]) ?? [String]() }
+        set { topicsToAvoid = newValue as NSArray }
     }
     
     /// Interactions sorted by date (most recent first)

@@ -4,24 +4,25 @@
 //
 
 import Foundation
+import CoreData
 
 extension Interaction {
     /// Array of extracted interests (convenience accessor)
     var extractedInterestsArray: [String] {
-        get { extractedInterests as? [String] ?? [] }
-        set { extractedInterests = newValue as NSObject }
+        get { (extractedInterests as? [String]) ?? [String]() }
+        set { extractedInterests = newValue as NSArray }
     }
     
     /// Array of extracted events (convenience accessor)
     var extractedEventsArray: [String] {
-        get { extractedEvents as? [String] ?? [] }
-        set { extractedEvents = newValue as NSObject }
+        get { (extractedEvents as? [String]) ?? [String]() }
+        set { extractedEvents = newValue as NSArray }
     }
     
     /// Array of extracted dates (convenience accessor)
     var extractedDatesArray: [Date] {
-        get { extractedDates as? [Date] ?? [] }
-        set { extractedDates = newValue as NSObject }
+        get { (extractedDates as? [Date]) ?? [Date]() }
+        set { extractedDates = newValue as NSArray }
     }
     
     /// Source type enum

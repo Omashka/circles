@@ -127,13 +127,13 @@ class DataManager: ObservableObject {
         interaction.contact = contact
         
         if let interests = extractedInterests {
-            interaction.extractedInterests = interests as NSObject
+            interaction.extractedInterests = interests as NSArray
         }
         if let events = extractedEvents {
-            interaction.extractedEvents = events as NSObject
+            interaction.extractedEvents = events as NSArray
         }
         if let dates = extractedDates {
-            interaction.extractedDates = dates as NSObject
+            interaction.extractedDates = dates as NSArray
         }
         
         try await saveInteraction(interaction)
