@@ -10,7 +10,6 @@
 		89EAB87925880274004264D2 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89EAB87825880274004264D2 /* App.swift */; };
 		89EAB87B25880274004264D2 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89EAB87A25880274004264D2 /* ContentView.swift */; };
 		89EAB87D25880278004264D2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 89EAB87C25880278004264D2 /* Assets.xcassets */; };
-		89EAB88B25880278004264D2 /* PrivateDatabaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89EAB88A25880278004264D2 /* PrivateDatabaseTests.swift */; };
 		89EAB8A92588029F004264D2 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89EAB8A82588029F004264D2 /* CloudKit.framework */; };
 		89EAB8B1258837F3004264D2 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89EAB8B0258837F3004264D2 /* ViewModel.swift */; };
 		F4C904FD26139A8900252717 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C904FC26139A8900252717 /* Config.swift */; };
@@ -21,6 +20,8 @@
 		F4C9050626139A8900252722 /* ContactExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C9050726139A8900252722 /* ContactExtensions.swift */; };
 		F4C9050826139A8900252723 /* InteractionExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C9050926139A8900252723 /* InteractionExtensions.swift */; };
 		F4C9050A26139A8900252724 /* CirclesDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F4C9050B26139A8900252724 /* CirclesDataModel.xcdatamodeld */; };
+		F4C9050D26139A8900252726 /* SharedDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C9050E26139A8900252726 /* SharedDataManager.swift */; };
+		F4C9050F26139A8900252727 /* CloudKitSyncMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C9051026139A8900252727 /* CloudKitSyncMonitor.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,7 +41,6 @@
 		89EAB87C25880278004264D2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		89EAB88125880278004264D2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		89EAB88625880278004264D2 /* PrivateDatabaseTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PrivateDatabaseTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		89EAB88A25880278004264D2 /* PrivateDatabaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateDatabaseTests.swift; sourceTree = "<group>"; };
 		89EAB88C25880278004264D2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		89EAB8A625880296004264D2 /* App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = App.entitlements; sourceTree = "<group>"; };
 		89EAB8A82588029F004264D2 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
@@ -53,6 +53,8 @@
 		F4C9050726139A8900252722 /* ContactExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Models/ContactExtensions.swift"; sourceTree = "<group>"; };
 		F4C9050926139A8900252723 /* InteractionExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Models/InteractionExtensions.swift"; sourceTree = "<group>"; };
 		F4C9050C26139A8900252725 /* CirclesDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CirclesDataModel.xcdatamodel; sourceTree = "<group>"; };
+		F4C9050E26139A8900252726 /* SharedDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data/SharedDataManager.swift"; sourceTree = "<group>"; };
+		F4C9051026139A8900252727 /* CloudKitSyncMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data/CloudKitSyncMonitor.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin XCVersionGroup section */
@@ -116,6 +118,8 @@
 				89EAB8B0258837F3004264D2 /* ViewModel.swift */,
 				F4C904FF26139A8900252718 /* DataManager.swift */,
 				F4C9050126139A8900252719 /* PersistenceController.swift */,
+				F4C9050E26139A8900252726 /* SharedDataManager.swift */,
+				F4C9051026139A8900252727 /* CloudKitSyncMonitor.swift */,
 				F4C9050726139A8900252722 /* ContactExtensions.swift */,
 				F4C9050926139A8900252723 /* InteractionExtensions.swift */,
 				F4C9050B26139A8900252724 /* CirclesDataModel.xcdatamodeld */,
@@ -128,7 +132,6 @@
 		89EAB88925880278004264D2 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				89EAB88A25880278004264D2 /* PrivateDatabaseTests.swift */,
 				F4C9050326139A8900252720 /* ContactTests.swift */,
 				F4C9050526139A8900252721 /* DataManagerTests.swift */,
 				89EAB88C25880278004264D2 /* Info.plist */,
@@ -251,6 +254,8 @@
 				F4C9050626139A8900252722 /* ContactExtensions.swift in Sources */,
 				F4C9050826139A8900252723 /* InteractionExtensions.swift in Sources */,
 				F4C9050A26139A8900252724 /* CirclesDataModel.xcdatamodeld in Sources */,
+				F4C9050D26139A8900252726 /* SharedDataManager.swift in Sources */,
+				F4C9050F26139A8900252727 /* CloudKitSyncMonitor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -258,7 +263,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				89EAB88B25880278004264D2 /* PrivateDatabaseTests.swift in Sources */,
 				F4C9050226139A8900252720 /* ContactTests.swift in Sources */,
 				F4C9050426139A8900252721 /* DataManagerTests.swift in Sources */,
 			);
