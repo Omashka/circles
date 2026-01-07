@@ -29,6 +29,9 @@ class InteractionViewModel: ObservableObject {
         errorMessage = nil
         
         do {
+            // Refresh the contact object to ensure we have latest relationships
+            dataManager.viewContext.refresh(contact, mergeChanges: true)
+            
             interactions = await dataManager.fetchInteractions(for: contact)
             // Sort by date (most recent first)
             interactions.sort { interaction1, interaction2 in

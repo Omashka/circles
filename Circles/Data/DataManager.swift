@@ -83,11 +83,18 @@ class DataManager: ObservableObject {
     // MARK: - Interaction Operations
     
     func fetchInteractions(for contact: Contact) async -> [Interaction] {
+        // Refresh the contact object to ensure we have the latest data
+        viewContext.refresh(contact, mergeChanges: true)
+        
         let request = Interaction.fetchRequest()
         request.predicate = NSPredicate(format: "contact == %@", contact)
         request.sortDescriptors = [NSSortDescriptor(keyPath: \Interaction.interactionDate, ascending: false)]
         
         do {
+            // Process pending changes before fetching
+            if viewContext.hasChanges {
+                try viewContext.save()
+            }
             return try viewContext.fetch(request)
         } catch {
             logger.error("Failed to fetch interactions: \(error.localizedDescription)")
@@ -143,6 +150,11 @@ class DataManager: ObservableObject {
         }
         
         try await saveInteraction(interaction)
+        
+        // Ensure the interaction is fully saved and contact relationship is updated
+        viewContext.refresh(contact, mergeChanges: true)
+        viewContext.refresh(interaction, mergeChanges: true)
+        
         return interaction
     }
     

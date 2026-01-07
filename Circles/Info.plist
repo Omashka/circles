@@ -46,5 +46,9 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>Circles needs speech recognition to transcribe your voice notes about contacts</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Circles needs microphone access to record voice notes</string>
 </dict>
 </plist>

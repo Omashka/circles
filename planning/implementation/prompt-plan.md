@@ -8,7 +8,7 @@
 - [x] Prompt 4: Contact list view with glass UI
 - [x] Prompt 5: Contact detail view and editing
 - [x] Prompt 6: Relationship meter and interaction logging
-- [ ] Prompt 7: Voice notes with speech recognition
+- [x] Prompt 7: Voice notes with speech recognition
 - [ ] Prompt 8: AI service integration (Gemini API)
 - [ ] Prompt 9: Apple Shortcuts integration (URL scheme)
 - [ ] Prompt 10: Cloudflare Workers backend

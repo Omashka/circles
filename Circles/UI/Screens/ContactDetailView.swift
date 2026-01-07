@@ -15,6 +15,7 @@ struct ContactDetailView: View {
     @State private var showingEditView = false
     @State private var showingDeleteConfirmation = false
     @State private var showingAddInteraction = false
+    @State private var showingVoiceNote = false
     @State private var editingInteraction: Interaction?
     
     init(contact: Contact) {
@@ -92,6 +93,16 @@ struct ContactDetailView: View {
                         await interactionViewModel.loadInteractions()
                     }
                 }
+        }
+        .sheet(isPresented: $showingVoiceNote) {
+            VoiceNoteRecordingView(
+                viewModel: VoiceNoteViewModel(contact: contact, dataManager: dataManager)
+            )
+            .onDisappear {
+                Task {
+                    await interactionViewModel.loadInteractions()
+                }
+            }
         }
         .sheet(item: $editingInteraction) { interaction in
             InteractionEditView(contact: contact, interaction: interaction)
@@ -300,15 +311,30 @@ struct ContactDetailView: View {
                 
                 Spacer()
                 
-                Button {
-                    showingAddInteraction = true
-                } label: {
-                    HStack(spacing: 4) {
-                        Image(systemName: "plus.circle.fill")
-                        Text("Add")
+                HStack(spacing: 12) {
+                    // Voice note button
+                    Button {
+                        showingVoiceNote = true
+                    } label: {
+                        HStack(spacing: 4) {
+                            Image(systemName: "mic.fill")
+                            Text("Voice")
+                        }
+                        .font(.subheadline)
+                        .foregroundStyle(Color.glassBlue)
                     }
-                    .font(.subheadline)
-                    .foregroundStyle(Color.glassBlue)
+                    
+                    // Add interaction button
+                    Button {
+                        showingAddInteraction = true
+                    } label: {
+                        HStack(spacing: 4) {
+                            Image(systemName: "plus.circle.fill")
+                            Text("Add")
+                        }
+                        .font(.subheadline)
+                        .foregroundStyle(Color.glassBlue)
+                    }
                 }
             }
             
