@@ -6,8 +6,8 @@
 - [x] Prompt 2: CloudKit configuration and data manager
 - [x] Prompt 3: Basic UI structure and navigation
 - [x] Prompt 4: Contact list view with glass UI
-- [ ] Prompt 5: Contact detail view and editing
-- [ ] Prompt 6: Relationship meter and interaction logging
+- [x] Prompt 5: Contact detail view and editing
+- [x] Prompt 6: Relationship meter and interaction logging
 - [ ] Prompt 7: Voice notes with speech recognition
 - [ ] Prompt 8: AI service integration (Gemini API)
 - [ ] Prompt 9: Apple Shortcuts integration (URL scheme)

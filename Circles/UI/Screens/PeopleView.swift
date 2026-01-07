@@ -62,8 +62,12 @@ struct PeopleView: View {
                 SettingsView()
             }
             .sheet(isPresented: $showingAddContact) {
-                Text("Add Contact (Coming in Prompt 5)")
-                    .presentationDetents([.medium])
+                ContactEditView()
+                    .environmentObject(dataManager)
+            }
+            .navigationDestination(for: Contact.self) { contact in
+                ContactDetailView(contact: contact)
+                    .environmentObject(dataManager)
             }
             .task {
                 await viewModel.loadContacts()
@@ -77,12 +81,10 @@ struct PeopleView: View {
         ScrollView {
             LazyVStack(spacing: 12) {
                 ForEach(viewModel.filteredContacts) { contact in
-                    Button {
-                        // Navigate to detail (Prompt 5)
-                    } label: {
+                    NavigationLink(value: contact) {
                         ContactCard(contact: contact)
                     }
-                    .buttonStyle(.plain)
+                    .buttonStyle(CardButtonStyle())
                 }
             }
             .padding()
@@ -196,6 +198,22 @@ struct PeopleView: View {
                 .padding()
             }
         }
+    }
+}
+
+// MARK: - Card Button Style
+
+struct CardButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed ? 0.98 : 1.0)
+            .shadow(
+                color: .black.opacity(configuration.isPressed ? 0.05 : 0.1),
+                radius: configuration.isPressed ? 4 : 8,
+                x: 0,
+                y: configuration.isPressed ? 2 : 4
+            )
+            .animation(.easeInOut(duration: 0.15), value: configuration.isPressed)
     }
 }
 

@@ -34,11 +34,17 @@
 		F4C9052326139A8900252737 /* RemindersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C9052426139A8900252737 /* RemindersView.swift */; };
 		F4C9052526139A8900252738 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C9052626139A8900252738 /* SettingsView.swift */; };
 		F4C9052726139A8900252739 /* ContactsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C9052826139A8900252739 /* ContactsViewModel.swift */; };
+		F4C9054926139A8900252754 /* InteractionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C9054A26139A8900252754 /* InteractionViewModel.swift */; };
 		F4C9052926139A8900252740 /* ContactCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C9052A26139A8900252740 /* ContactCard.swift */; };
 		F4C9052B26139A8900252741 /* SampleDataGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C9052C26139A8900252741 /* SampleDataGenerator.swift */; };
 		F4C9052D26139A8900252742 /* DebugHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C9052E26139A8900252742 /* DebugHelpers.swift */; };
 		F4C9052F26139A8900252743 /* ContactsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C9053026139A8900252743 /* ContactsViewModelTests.swift */; };
 		F4C9053126139A8900252744 /* SampleDataGeneratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C9053226139A8900252744 /* SampleDataGeneratorTests.swift */; };
+		F4C9054026139A8900252750 /* ContactDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C9054126139A8900252750 /* ContactDetailView.swift */; };
+		F4C9054326139A8900252751 /* ContactEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C9054426139A8900252751 /* ContactEditView.swift */; };
+		F4C9054B26139A8900252755 /* InteractionEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C9054C26139A8900252755 /* InteractionEditView.swift */; };
+		F4C9054526139A8900252752 /* ContactDetailViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C9054626139A8900252752 /* ContactDetailViewTests.swift */; };
+		F4C9054726139A8900252753 /* ContactEditViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C9054826139A8900252753 /* ContactEditViewTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +73,7 @@
 		F4C9050126139A8900252719 /* PersistenceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data/PersistenceController.swift"; sourceTree = "<group>"; };
 		F4C9050326139A8900252720 /* ContactTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactTests.swift; sourceTree = "<group>"; };
 		F4C9050526139A8900252721 /* DataManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManagerTests.swift; sourceTree = "<group>"; };
+		F4C9054E26139A8900252756 /* RelationshipScoringTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelationshipScoringTests.swift; sourceTree = "<group>"; };
 		F4C9050726139A8900252722 /* ContactExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Models/ContactExtensions.swift"; sourceTree = "<group>"; };
 		F4C9050926139A8900252723 /* InteractionExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Models/InteractionExtensions.swift"; sourceTree = "<group>"; };
 		F4C9050C26139A8900252725 /* CirclesDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CirclesDataModel.xcdatamodel; sourceTree = "<group>"; };
@@ -76,6 +83,8 @@
 		F4C9051426139A8900252729 /* SharedDataManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedDataManagerTests.swift; sourceTree = "<group>"; };
 		F4C9053026139A8900252743 /* ContactsViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsViewModelTests.swift; sourceTree = "<group>"; };
 		F4C9053226139A8900252744 /* SampleDataGeneratorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleDataGeneratorTests.swift; sourceTree = "<group>"; };
+		F4C9054126139A8900252750 /* ContactDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactDetailView.swift; sourceTree = "<group>"; };
+		F4C9054426139A8900252751 /* ContactEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactEditView.swift; sourceTree = "<group>"; };
 		F4C9051626139A8900252730 /* GlassCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UI/Components/GlassCard.swift"; sourceTree = "<group>"; };
 		F4C9051826139A8900252731 /* GlassButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UI/Components/GlassButton.swift"; sourceTree = "<group>"; };
 		F4C9051A26139A8900252732 /* GlassBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UI/Components/GlassBackground.swift"; sourceTree = "<group>"; };
@@ -86,9 +95,13 @@
 		F4C9052426139A8900252737 /* RemindersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UI/Screens/RemindersView.swift"; sourceTree = "<group>"; };
 		F4C9052626139A8900252738 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UI/Screens/SettingsView.swift"; sourceTree = "<group>"; };
 		F4C9052826139A8900252739 /* ContactsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewModels/ContactsViewModel.swift"; sourceTree = "<group>"; };
+		F4C9054A26139A8900252754 /* InteractionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewModels/InteractionViewModel.swift"; sourceTree = "<group>"; };
 		F4C9052A26139A8900252740 /* ContactCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UI/Components/ContactCard.swift"; sourceTree = "<group>"; };
 		F4C9052C26139A8900252741 /* SampleDataGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data/SampleDataGenerator.swift"; sourceTree = "<group>"; };
 		F4C9052E26139A8900252742 /* DebugHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Debug/DebugHelpers.swift"; sourceTree = "<group>"; };
+		F4C9054126139A8900252750 /* ContactDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UI/Screens/ContactDetailView.swift"; sourceTree = "<group>"; };
+		F4C9054426139A8900252751 /* ContactEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UI/Screens/ContactEditView.swift"; sourceTree = "<group>"; };
+		F4C9054C26139A8900252755 /* InteractionEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UI/Screens/InteractionEditView.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin XCVersionGroup section */
@@ -159,6 +172,7 @@
 				F4C9050726139A8900252722 /* ContactExtensions.swift */,
 				F4C9050926139A8900252723 /* InteractionExtensions.swift */,
 				F4C9052826139A8900252739 /* ContactsViewModel.swift */,
+				F4C9054A26139A8900252754 /* InteractionViewModel.swift */,
 				F4C9051626139A8900252730 /* GlassCard.swift */,
 				F4C9051826139A8900252731 /* GlassButton.swift */,
 				F4C9051A26139A8900252732 /* GlassBackground.swift */,
@@ -169,6 +183,9 @@
 				F4C9052226139A8900252736 /* WebView.swift */,
 				F4C9052426139A8900252737 /* RemindersView.swift */,
 				F4C9052626139A8900252738 /* SettingsView.swift */,
+				F4C9054126139A8900252750 /* ContactDetailView.swift */,
+				F4C9054426139A8900252751 /* ContactEditView.swift */,
+				F4C9054C26139A8900252755 /* InteractionEditView.swift */,
 				F4C9050B26139A8900252724 /* CirclesDataModel.xcdatamodeld */,
 				89EAB87C25880278004264D2 /* Assets.xcassets */,
 				89EAB88125880278004264D2 /* Info.plist */,
@@ -181,10 +198,13 @@
 			children = (
 				F4C9050326139A8900252720 /* ContactTests.swift */,
 				F4C9050526139A8900252721 /* DataManagerTests.swift */,
+				F4C9054E26139A8900252756 /* RelationshipScoringTests.swift */,
 				F4C9051226139A8900252728 /* CloudKitSyncMonitorTests.swift */,
 				F4C9051426139A8900252729 /* SharedDataManagerTests.swift */,
 				F4C9053026139A8900252743 /* ContactsViewModelTests.swift */,
 				F4C9053226139A8900252744 /* SampleDataGeneratorTests.swift */,
+				F4C9054626139A8900252752 /* ContactDetailViewTests.swift */,
+				F4C9054826139A8900252753 /* ContactEditViewTests.swift */,
 				89EAB88C25880278004264D2 /* Info.plist */,
 			);
 			path = Tests;
@@ -316,7 +336,11 @@
 				F4C9052126139A8900252736 /* WebView.swift in Sources */,
 				F4C9052326139A8900252737 /* RemindersView.swift in Sources */,
 				F4C9052526139A8900252738 /* SettingsView.swift in Sources */,
+				F4C9054026139A8900252750 /* ContactDetailView.swift in Sources */,
+				F4C9054326139A8900252751 /* ContactEditView.swift in Sources */,
+				F4C9054B26139A8900252755 /* InteractionEditView.swift in Sources */,
 				F4C9052726139A8900252739 /* ContactsViewModel.swift in Sources */,
+				F4C9054926139A8900252754 /* InteractionViewModel.swift in Sources */,
 				F4C9052926139A8900252740 /* ContactCard.swift in Sources */,
 				F4C9052B26139A8900252741 /* SampleDataGenerator.swift in Sources */,
 				F4C9052D26139A8900252742 /* DebugHelpers.swift in Sources */,
@@ -329,10 +353,13 @@
 			files = (
 				F4C9050226139A8900252720 /* ContactTests.swift in Sources */,
 				F4C9050426139A8900252721 /* DataManagerTests.swift in Sources */,
+				F4C9054D26139A8900252756 /* RelationshipScoringTests.swift in Sources */,
 				F4C9051126139A8900252728 /* CloudKitSyncMonitorTests.swift in Sources */,
 				F4C9051326139A8900252729 /* SharedDataManagerTests.swift in Sources */,
 				F4C9052F26139A8900252743 /* ContactsViewModelTests.swift in Sources */,
 				F4C9053126139A8900252744 /* SampleDataGeneratorTests.swift in Sources */,
+				F4C9054526139A8900252752 /* ContactDetailViewTests.swift in Sources */,
+				F4C9054726139A8900252753 /* ContactEditViewTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

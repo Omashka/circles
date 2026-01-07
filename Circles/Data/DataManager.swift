@@ -108,6 +108,12 @@ class DataManager: ObservableObject {
         logger.info("Interaction saved")
     }
     
+    func deleteInteraction(_ interaction: Interaction) async throws {
+        viewContext.delete(interaction)
+        try persistence.save()
+        logger.info("Interaction deleted")
+    }
+    
     func createInteraction(
         for contact: Contact,
         content: String,

@@ -6,64 +6,168 @@
 import SwiftUI
 
 /// A glass-styled card displaying contact information
+/// Follows Apple's design guidelines for list rows
 struct ContactCard: View {
     let contact: Contact
     
     var body: some View {
         GlassCard(padding: 16) {
-            HStack(spacing: 16) {
+            HStack(alignment: .top, spacing: 12) {
                 // Profile photo with fallback initials
                 ProfilePhotoView(
                     photoData: contact.profilePhotoData,
                     name: contact.name ?? "?",
-                    size: 60
+                    size: 50
                 )
                 
-                // Contact info
+                // Contact info - flexible width
                 VStack(alignment: .leading, spacing: 6) {
+                    // Name - can truncate (max 2 lines)
                     Text(contact.name ?? "Unknown")
                         .font(.headline)
                         .foregroundStyle(.primary)
+                        .lineLimit(2)
+                        .multilineTextAlignment(.leading)
                     
-                    Text(contact.relationshipType ?? "Contact")
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                    
-                    // Relationship meter
-                    RelationshipMeter(score: contact.relationshipScore)
-                        .frame(height: 6)
+                    // Metadata row - never truncates, baseline-aligned
+                    HStack(alignment: .firstTextBaseline, spacing: 6) {
+                        // Relationship pill
+                        RelationshipPill(type: contact.relationshipType ?? "Contact")
+                        
+                        // Time - normalized format (always days)
+                        Text(formatTimeAgo(contact.daysSinceLastContact))
+                            .font(.subheadline)
+                            .foregroundStyle(checkInColor)
+                        
+                        // Check in icon (always visible if needed)
+                        if contact.daysSinceLastContact >= 30 {
+                            CheckInButton(contact: contact)
+                        }
+                    }
+                    .fixedSize(horizontal: false, vertical: true)
                 }
+                .layoutPriority(1)
                 
-                Spacer()
+                Spacer(minLength: 8)
                 
-                // Last contacted indicator
-                VStack(alignment: .trailing, spacing: 6) {
-                    Text("\(contact.daysSinceLastContact)d")
+                // Relationship meter - fixed width, right-aligned
+                RelationshipMeter(score: contact.relationshipScore)
+                    .frame(width: 50, height: 6)
+                    .layoutPriority(0)
+                
+                // Chevron - interaction affordance
+                Image(systemName: "chevron.right")
+                    .font(.caption)
+                    .foregroundStyle(.tertiary)
+                    .fontWeight(.semibold)
+            }
+        }
+        .contentShape(Rectangle())
+    }
+    
+    // MARK: - Helper Properties
+    
+    private var checkInColor: Color {
+        switch contact.urgencyLevel {
+        case .medium:
+            return Color(red: 0.7, green: 0.5, blue: 0.3) // Golden-brown
+        case .high, .critical:
+            return Color(red: 0.6, green: 0.3, blue: 0.2) // Reddish-brown
+        default:
+            return .secondary
+        }
+    }
+    
+    // MARK: - Helper Methods
+    
+    private func formatTimeAgo(_ days: Int) -> String {
+        // Compact format for constrained rows
+        if days == 0 {
+            return "today"
+        } else if days == 1 {
+            return "1d ago"
+        } else {
+            return "\(days)d ago"
+        }
+    }
+}
+
+// MARK: - Relationship Pill
+
+struct RelationshipPill: View {
+    let type: String
+    
+    var body: some View {
+        Text(type)
+            .font(.caption)
+            .fontWeight(.medium)
+            .foregroundStyle(pillColor)
+            .lineLimit(1)
+            .truncationMode(.tail)
+            .minimumScaleFactor(0.9)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 4)
+            .background(
+                Capsule()
+                    .fill(.white)
+            )
+            .overlay(
+                Capsule()
+                    .stroke(pillColor.opacity(0.85), lineWidth: 0.8) // Reduced opacity and line width
+            )
+    }
+    
+    private var pillColor: Color {
+        // Use a subtle, pleasant color instead of grey
+        Color(red: 0.4, green: 0.5, blue: 0.7) // Soft blue-grey
+    }
+}
+
+// MARK: - Check In Button
+
+struct CheckInButton: View {
+    let contact: Contact
+    @State private var showLabel = false
+    
+    var body: some View {
+        Button {
+            // TODO: Implement check-in action
+        } label: {
+            HStack(spacing: 4) {
+                Image(systemName: "bell.fill")
+                    .font(.caption2)
+                    .foregroundStyle(checkInColor)
+                
+                if showLabel {
+                    Text("Check in")
                         .font(.caption)
-                        .fontWeight(.medium)
-                        .foregroundStyle(.secondary)
-                    
-                    // Urgency indicator dot
-                    Circle()
-                        .fill(urgencyColor(for: contact.urgencyLevel))
-                        .frame(width: 10, height: 10)
+                        .foregroundStyle(checkInColor)
+                        .transition(.opacity)
+                }
+            }
+        }
+        .buttonStyle(.plain)
+        .onLongPressGesture(minimumDuration: 0.1) {
+            withAnimation {
+                showLabel = true
+            }
+        } onPressingChanged: { pressing in
+            if !pressing {
+                withAnimation {
+                    showLabel = false
                 }
             }
         }
     }
     
-    // MARK: - Helper
-    
-    private func urgencyColor(for level: UrgencyLevel) -> Color {
-        switch level {
-        case .low:
-            return .green
+    private var checkInColor: Color {
+        switch contact.urgencyLevel {
         case .medium:
-            return .yellow
-        case .high:
-            return .orange
-        case .critical:
-            return .red
+            return Color(red: 0.7, green: 0.5, blue: 0.3) // Golden-brown
+        case .high, .critical:
+            return Color(red: 0.6, green: 0.3, blue: 0.2) // Reddish-brown
+        default:
+            return .secondary
         }
     }
 }
@@ -140,6 +244,7 @@ struct ProfilePhotoView: View {
 
 struct RelationshipMeter: View {
     let score: Double // 0.0 to 1.0
+    @State private var isAnimated = false
     
     var meterColor: Color {
         switch score {
@@ -157,12 +262,21 @@ struct RelationshipMeter: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack(alignment: .leading) {
-                // Background
+                // Background with subtle fade
                 Capsule()
-                    .fill(.quaternary)
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                Color.secondary.opacity(0.15),
+                                Color.secondary.opacity(0.25)
+                            ],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                    )
                     .frame(height: 6)
                 
-                // Progress
+                // Progress with rounded end cap
                 Capsule()
                     .fill(
                         LinearGradient(
@@ -171,8 +285,19 @@ struct RelationshipMeter: View {
                             endPoint: .trailing
                         )
                     )
-                    .frame(width: geometry.size.width * score, height: 6)
+                    .frame(
+                        width: isAnimated ? geometry.size.width * score : 0,
+                        height: 6
+                    )
+                    .animation(
+                        .easeOut(duration: 0.6)
+                        .delay(0.1),
+                        value: isAnimated
+                    )
             }
+        }
+        .onAppear {
+            isAnimated = true
         }
     }
 }
@@ -183,7 +308,17 @@ struct RelationshipMeter: View {
         GlassBackground()
         
         VStack(spacing: 16) {
-            // Sample contact with photo
+            // Sample contact with check-in
+            ContactCard(contact: {
+                let contact = Contact(context: PersistenceController.preview.viewContext)
+                contact.id = UUID()
+                contact.name = "Jessica Martinez"
+                contact.relationshipType = "Colleague"
+                contact.lastConnectedDate = Calendar.current.date(byAdding: .day, value: -35, to: Date())
+                return contact
+            }())
+            
+            // Sample contact without check-in
             ContactCard(contact: {
                 let contact = Contact(context: PersistenceController.preview.viewContext)
                 contact.id = UUID()
@@ -192,18 +327,7 @@ struct RelationshipMeter: View {
                 contact.lastConnectedDate = Calendar.current.date(byAdding: .day, value: -5, to: Date())
                 return contact
             }())
-            
-            // Sample contact without photo
-            ContactCard(contact: {
-                let contact = Contact(context: PersistenceController.preview.viewContext)
-                contact.id = UUID()
-                contact.name = "John Doe"
-                contact.relationshipType = "Family"
-                contact.lastConnectedDate = Calendar.current.date(byAdding: .day, value: -45, to: Date())
-                return contact
-            }())
         }
         .padding()
     }
 }
-

@@ -63,18 +63,18 @@ class ContactsViewModel: ObservableObject {
         }
     }
     
-    /// Sort contacts by last connected date (most urgent first)
+    /// Sort contacts by last connected date (most recent first)
     private func sortedContacts(_ contacts: [Contact]) -> [Contact] {
         contacts.sorted { contact1, contact2 in
             let days1 = contact1.daysSinceLastContact
             let days2 = contact2.daysSinceLastContact
             
-            // Sort by urgency (more days = more urgent = higher priority)
+            // Sort by most recent first (fewer days = more recent = higher priority)
             if days1 != days2 {
-                return days1 > days2
+                return days1 < days2
             }
             
-            // If same urgency, sort by name
+            // If same recency, sort by name
             let name1 = contact1.name ?? ""
             let name2 = contact2.name ?? ""
             return name1 < name2
