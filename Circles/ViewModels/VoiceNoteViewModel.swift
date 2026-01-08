@@ -6,6 +6,7 @@
 import SwiftUI
 import AVFoundation
 import Speech
+import os.log
 
 /// ViewModel managing voice note recording state and operations
 @MainActor
@@ -18,12 +19,18 @@ class VoiceNoteViewModel: ObservableObject {
     @Published var errorMessage: String?
     @Published var timeRemaining: String = "3:00"
     @Published var hasPermissions = false
+    @Published var isProcessingAI = false
+    @Published var aiSummary: VoiceNoteSummary?
+    @Published var showingSummaryEdit = false
     
     // MARK: - Private Properties
     
-    private let recorder = VoiceNoteRecorder()
-    private let contact: Contact
-    private let dataManager: DataManager
+    let recorder = VoiceNoteRecorder()
+    let contact: Contact
+    let dataManager: DataManager
+    private let aiService = AIService.shared
+    private let offlineQueue = OfflineQueueManager.shared
+    private let logger = Logger(subsystem: "com.circles.app", category: "VoiceNoteViewModel")
     
     // MARK: - Initialization
     
@@ -40,7 +47,7 @@ class VoiceNoteViewModel: ObservableObject {
         
         recorder.onDurationReached = { [weak self] in
             Task { @MainActor in
-                self?.stopRecording()
+                await self?.stopRecording()
             }
         }
     }
@@ -80,6 +87,7 @@ class VoiceNoteViewModel: ObservableObject {
     /// Stop recording and save
     func stopRecording() {
         recorder.stopRecording()
+        // Force immediate state update to ensure transcription is synced
         updateStateFromRecorder()
     }
     
@@ -99,27 +107,141 @@ class VoiceNoteViewModel: ObservableObject {
         timeRemaining = recorder.formattedTime
     }
     
-    /// Save the voice note as an interaction
-    func saveVoiceNote() async throws {
+    /// Process voice note with AI and show summary edit view
+    func processWithAI(transcriptionOverride: String? = nil) async {
+        // Ensure we have the latest transcription from the recorder
+        updateStateFromRecorder()
+        
+        // Use provided transcription or get from recorder/view model
+        let transcriptionToUse: String
+        if let override = transcriptionOverride, !override.isEmpty {
+            transcriptionToUse = override
+        } else {
+            // Try recorder first (most up-to-date), then fallback to view model
+            transcriptionToUse = recorder.transcription.isEmpty ? transcription : recorder.transcription
+        }
+        
+        let trimmed = transcriptionToUse.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        guard !trimmed.isEmpty else {
+            errorMessage = "Transcription is empty. Please record a voice note first."
+            logger.error("Transcription is empty")
+            return
+        }
+        
+        logger.info("Starting AI processing with transcription length: \(trimmed.count)")
+        isProcessingAI = true
+        errorMessage = nil
+        
+        do {
+            // Try to get AI summary
+            logger.info("Calling AIService.summarizeVoiceNote...")
+            let summary = try await aiService.summarizeVoiceNote(
+                transcription: trimmed,
+                contactName: contact.name
+            )
+            
+            logger.info("AI summary received - Summary: \(summary.summary), Work Info: \(summary.workInfo ?? "nil"), Interests: \(summary.interests)")
+            
+            aiSummary = summary
+            showingSummaryEdit = true
+            isProcessingAI = false
+            logger.info("Summary edit view should now be showing")
+        } catch {
+            logger.error("AI processing failed: \(error.localizedDescription, privacy: .public)")
+            
+            // If offline or API fails, queue the operation
+            if let aiError = error as? AIError {
+                logger.error("AIError type: \(String(describing: aiError), privacy: .public)")
+                if aiError == .apiKeyMissing {
+                    errorMessage = "AI service is not configured. Saving without AI processing."
+                    logger.warning("API key is missing")
+                    // Save directly without AI
+                    await saveVoiceNoteDirectly(trimmed: trimmed)
+                } else {
+                    logger.warning("Other AI error, queueing for offline processing")
+                    // Queue for offline processing
+                    let operation = QueuedAIOperation(
+                        id: UUID(),
+                        type: .voiceNoteSummarization,
+                        transcription: trimmed,
+                        contactId: contact.id,
+                        createdAt: Date()
+                    )
+                    offlineQueue.enqueue(operation)
+                    
+                    errorMessage = "Offline or AI service unavailable. Saved to queue for processing later."
+                    // Save with raw transcription for now
+                    await saveVoiceNoteDirectly(trimmed: trimmed)
+                }
+            } else {
+                logger.warning("Non-AIError, queueing for offline processing: \(error.localizedDescription, privacy: .public)")
+                // Other errors - queue for offline processing
+                let operation = QueuedAIOperation(
+                    id: UUID(),
+                    type: .voiceNoteSummarization,
+                    transcription: trimmed,
+                    contactId: contact.id,
+                    createdAt: Date()
+                )
+                offlineQueue.enqueue(operation)
+                
+                errorMessage = "AI service error: \(error.localizedDescription). Saved to queue for processing later."
+                // Save with raw transcription for now
+                await saveVoiceNoteDirectly(trimmed: trimmed)
+            }
+            isProcessingAI = false
+        }
+    }
+    
+    /// Save the voice note with AI summary
+    func saveVoiceNote(with summary: VoiceNoteSummary) async throws {
         let trimmed = transcription.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else {
             throw NSError(domain: "VoiceNoteError", code: 1, userInfo: [NSLocalizedDescriptionKey: "Transcription is empty"])
         }
         
-        // Create interaction with voice note transcription
+        // Create interaction with AI summary and extracted data
         _ = try await dataManager.createInteraction(
             for: contact,
-            content: trimmed,
+            content: summary.summary,
             source: .voiceNote,
             rawTranscription: trimmed,
-            extractedInterests: nil,
-            extractedEvents: nil,
-            extractedDates: nil
+            extractedInterests: summary.interests.isEmpty ? nil : summary.interests,
+            extractedEvents: summary.events.isEmpty ? nil : summary.events,
+            extractedDates: summary.dates.isEmpty ? nil : summary.dates
+        )
+        
+        // Update contact profile with AI-extracted data
+        try await ProfileUpdateService.shared.updateContactProfile(
+            contact,
+            with: summary,
+            dataManager: dataManager
         )
         
         // Reset state
         transcription = ""
         errorMessage = nil
+        aiSummary = nil
+    }
+    
+    /// Save voice note directly without AI processing (fallback)
+    func saveVoiceNoteDirectly(trimmed: String) async {
+        do {
+            _ = try await dataManager.createInteraction(
+                for: contact,
+                content: trimmed,
+                source: .voiceNote,
+                rawTranscription: trimmed,
+                extractedInterests: nil,
+                extractedEvents: nil,
+                extractedDates: nil
+            )
+            transcription = ""
+            errorMessage = nil
+        } catch {
+            errorMessage = "Failed to save voice note: \(error.localizedDescription)"
+        }
     }
     
     // MARK: - Private Methods

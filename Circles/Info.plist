@@ -50,5 +50,7 @@
 	<string>Circles needs speech recognition to transcribe your voice notes about contacts</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Circles needs microphone access to record voice notes</string>
+	<key>GEMINI_API_KEY</key>
+	<string>AIzaSyAcoUnPCG9OG5vwDgRTITLgI9jD5i6hWdc</string>
 </dict>
 </plist>

@@ -36,7 +36,7 @@ struct ContactCard: View {
                         
                         // Time - normalized format (always days)
                         Text(formatTimeAgo(contact.daysSinceLastContact))
-                            .font(.subheadline)
+                        .font(.subheadline)
                             .foregroundStyle(checkInColor)
                         
                         // Check in icon (always visible if needed)
@@ -49,9 +49,9 @@ struct ContactCard: View {
                 .layoutPriority(1)
                 
                 Spacer(minLength: 8)
-                
+                    
                 // Relationship meter - fixed width, right-aligned
-                RelationshipMeter(score: contact.relationshipScore)
+                    RelationshipMeter(score: contact.relationshipScore)
                     .frame(width: 50, height: 6)
                     .layoutPriority(0)
                 

@@ -39,18 +39,18 @@ struct PeopleView: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     HStack(spacing: 12) {
                         // Settings button
-                        Button {
-                            showingSettings = true
-                        } label: {
-                            Image(systemName: "gearshape.fill")
+                    Button {
+                        showingSettings = true
+                    } label: {
+                        Image(systemName: "gearshape.fill")
                                 .font(.system(size: 18, weight: .medium))
-                                .foregroundStyle(.secondary)
+                            .foregroundStyle(.secondary)
                         }
                         
                         // Add contact button
-                        Button {
-                            showingAddContact = true
-                        } label: {
+                    Button {
+                        showingAddContact = true
+                    } label: {
                             Image(systemName: "plus.circle.fill")
                                 .font(.system(size: 22, weight: .medium))
                                 .foregroundStyle(Color.glassBlue)

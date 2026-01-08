@@ -61,21 +61,40 @@ struct VoiceNoteRecordingView: View {
                     // Stop timer
                     updateTimer?.invalidate()
                     updateTimer = nil
+                    
+                    // When recording stops, wait a moment then show save confirmation
+                    Task {
+                        // Wait for transcription to finalize
+                        try? await Task.sleep(nanoseconds: 300_000_000) // 0.3 seconds
+                        viewModel.updateStateFromRecorder()
+                        
+                        // Show alert if we have transcription
+                        if !viewModel.transcription.isEmpty {
+                            showingSaveConfirmation = true
+                        } else {
+                            // No transcription, dismiss
+                            dismiss()
+                        }
+                    }
                 }
             }
             .onDisappear {
                 updateTimer?.invalidate()
             }
             .alert("Save Voice Note", isPresented: $showingSaveConfirmation) {
-                Button("Save") {
+                Button("Process with AI") {
                     Task {
-                        do {
-                            try await viewModel.saveVoiceNote()
-                            dismiss()
-                        } catch {
-                            // Error is shown in viewModel.errorMessage
-                            showingSaveConfirmation = false
-                        }
+                        // Ensure state is synced before processing
+                        viewModel.updateStateFromRecorder()
+                        // Pass the current transcription explicitly to avoid race conditions
+                        await viewModel.processWithAI(transcriptionOverride: viewModel.transcription)
+                    }
+                }
+                Button("Save Without AI") {
+                    Task {
+                        let trimmed = viewModel.transcription.trimmingCharacters(in: .whitespacesAndNewlines)
+                        await viewModel.saveVoiceNoteDirectly(trimmed: trimmed)
+                        dismiss()
                     }
                 }
                 Button("Discard", role: .destructive) {
@@ -84,7 +103,45 @@ struct VoiceNoteRecordingView: View {
                 }
                 Button("Cancel", role: .cancel) { }
             } message: {
-                Text("Save this voice note as an interaction?")
+                Text("How would you like to save this voice note?")
+            }
+            .sheet(isPresented: $viewModel.showingSummaryEdit) {
+                if let summary = viewModel.aiSummary {
+                    VoiceNoteSummaryEditView(
+                        summary: summary,
+                        rawTranscription: viewModel.transcription,
+                        contact: viewModel.contact,
+                        dataManager: viewModel.dataManager,
+                        onSave: { editedSummary in
+                            Task {
+                                do {
+                                    try await viewModel.saveVoiceNote(with: editedSummary)
+                                    dismiss()
+                                } catch {
+                                    // Error is shown in viewModel.errorMessage
+                                }
+                            }
+                        }
+                    )
+                }
+            }
+            .overlay {
+                if viewModel.isProcessingAI {
+                    ZStack {
+                        Color.black.opacity(0.3)
+                            .ignoresSafeArea()
+                        VStack(spacing: 16) {
+                            ProgressView()
+                                .scaleEffect(1.5)
+                            Text("Processing with AI...")
+                                .font(.headline)
+                                .foregroundStyle(.white)
+                        }
+                        .padding(32)
+                        .background(.ultraThinMaterial)
+                        .cornerRadius(16)
+                    }
+                }
             }
         }
     }
@@ -221,12 +278,8 @@ struct VoiceNoteRecordingView: View {
             } else if viewModel.isRecording {
                 // Stop button
                 Button {
+                    // Stop recording synchronously - the onChange will handle showing the alert
                     viewModel.stopRecording()
-                    if !viewModel.transcription.isEmpty {
-                        showingSaveConfirmation = true
-                    } else {
-                        dismiss()
-                    }
                 } label: {
                     HStack(spacing: 12) {
                         Image(systemName: "stop.fill")

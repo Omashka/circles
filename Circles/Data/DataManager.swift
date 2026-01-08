@@ -151,9 +151,17 @@ class DataManager: ObservableObject {
         
         try await saveInteraction(interaction)
         
+        // Note: Profile updates are now handled by ProfileUpdateService in VoiceNoteViewModel
+        // This keeps the logic centralized and allows for better conflict resolution
+        
         // Ensure the interaction is fully saved and contact relationship is updated
         viewContext.refresh(contact, mergeChanges: true)
         viewContext.refresh(interaction, mergeChanges: true)
+        
+        // Process pending changes to ensure everything is saved
+        if viewContext.hasChanges {
+            try persistence.save()
+        }
         
         return interaction
     }

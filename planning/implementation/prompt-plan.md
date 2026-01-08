@@ -9,7 +9,7 @@
 - [x] Prompt 5: Contact detail view and editing
 - [x] Prompt 6: Relationship meter and interaction logging
 - [x] Prompt 7: Voice notes with speech recognition
-- [ ] Prompt 8: AI service integration (Gemini API)
+- [x] Prompt 8: AI service integration (Gemini API)
 - [ ] Prompt 9: Apple Shortcuts integration (URL scheme)
 - [ ] Prompt 10: Cloudflare Workers backend
 - [ ] Prompt 11: Force-directed graph foundation (SpriteKit)

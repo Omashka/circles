@@ -10,7 +10,7 @@ struct GlassBackground: View {
     @ViewBuilder
     var body: some View {
         Color.white
-            .ignoresSafeArea()
+                    .ignoresSafeArea()
     }
 }
 

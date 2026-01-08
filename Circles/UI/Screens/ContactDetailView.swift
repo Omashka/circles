@@ -16,7 +16,9 @@ struct ContactDetailView: View {
     @State private var showingDeleteConfirmation = false
     @State private var showingAddInteraction = false
     @State private var showingVoiceNote = false
+    @State private var showingGiftIdeas = false
     @State private var editingInteraction: Interaction?
+    @State private var refreshTrigger = UUID()
     
     init(contact: Contact) {
         self.contact = contact
@@ -52,6 +54,7 @@ struct ContactDetailView: View {
                 .padding()
             }
         }
+        .id(refreshTrigger) // Force refresh when trigger changes
         .navigationTitle(contact.name ?? "Contact")
         .navigationBarTitleDisplayMode(.large)
         .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
@@ -100,9 +103,21 @@ struct ContactDetailView: View {
             )
             .onDisappear {
                 Task {
+                    // Refresh contact to get updated profile data
+                    dataManager.viewContext.refresh(contact, mergeChanges: true)
+                    // Process pending changes to ensure contact is updated
+                    if dataManager.viewContext.hasChanges {
+                        try? dataManager.viewContext.save()
+                    }
+                    // Force view refresh to show updated Key Facts
+                    refreshTrigger = UUID()
+                    // Reload interactions
                     await interactionViewModel.loadInteractions()
                 }
             }
+        }
+        .sheet(isPresented: $showingGiftIdeas) {
+            GiftIdeasView(contact: contact)
         }
         .sheet(item: $editingInteraction) { interaction in
             InteractionEditView(contact: contact, interaction: interaction)
@@ -319,6 +334,18 @@ struct ContactDetailView: View {
                         HStack(spacing: 4) {
                             Image(systemName: "mic.fill")
                             Text("Voice")
+                        }
+                        .font(.subheadline)
+                        .foregroundStyle(Color.glassBlue)
+                    }
+                    
+                    // Gift ideas button
+                    Button {
+                        showingGiftIdeas = true
+                    } label: {
+                        HStack(spacing: 4) {
+                            Image(systemName: "gift.fill")
+                            Text("Gifts")
                         }
                         .font(.subheadline)
                         .foregroundStyle(Color.glassBlue)
