@@ -45,8 +45,7 @@ struct InteractionEditView: View {
             }
             .navigationTitle(interaction == nil ? "Add Interaction" : "Edit Interaction")
             .navigationBarTitleDisplayMode(.inline)
-            .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
-            .toolbarBackground(.visible, for: .navigationBar)
+            .toolbarBackground(.hidden, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {

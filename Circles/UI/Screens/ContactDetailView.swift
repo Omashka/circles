@@ -57,8 +57,7 @@ struct ContactDetailView: View {
         .id(refreshTrigger) // Force refresh when trigger changes
         .navigationTitle(contact.name ?? "Contact")
         .navigationBarTitleDisplayMode(.large)
-        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
-        .toolbarBackground(.visible, for: .navigationBar)
+        .toolbarBackground(.hidden, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
