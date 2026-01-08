@@ -10,8 +10,8 @@
 - [x] Prompt 6: Relationship meter and interaction logging
 - [x] Prompt 7: Voice notes with speech recognition
 - [x] Prompt 8: AI service integration (Gemini API)
-- [ ] Prompt 9: Apple Shortcuts integration (URL scheme)
-- [ ] Prompt 10: Cloudflare Workers backend
+- [x] Prompt 9: Apple Shortcuts integration (URL scheme)
+- [x] Prompt 10: Cloudflare Workers backend
 - [ ] Prompt 11: Force-directed graph foundation (SpriteKit)
 - [ ] Prompt 12: Graph interactions and connection management
 - [ ] Prompt 13: Widget extension implementation

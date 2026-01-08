@@ -1,0 +1,24 @@
+{
+  "name": "circles-backend",
+  "version": "1.0.0",
+  "description": "Cloudflare Workers backend for Circles app",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "test": "vitest"
+  },
+  "keywords": ["cloudflare-workers", "circles", "api"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20241106.0",
+    "typescript": "^5.3.3",
+    "vitest": "^1.2.0",
+    "wrangler": "^3.78.0"
+  },
+  "dependencies": {
+    "zod": "^3.22.4"
+  }
+}
+

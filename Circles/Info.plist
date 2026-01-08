@@ -52,5 +52,20 @@
 	<string>Circles needs microphone access to record voice notes</string>
 	<key>GEMINI_API_KEY</key>
 	<string>AIzaSyAcoUnPCG9OG5vwDgRTITLgI9jD5i6hWdc</string>
+	<key>BACKEND_URL</key>
+	<string>https://circles-backend.khansaad6786.workers.dev</string>
+	<key>BACKEND_API_KEY</key>
+	<string>ejpnsnjbqT8Gzk6fscnW6fKsXiJ5oXgEfUuGyEgv5E3tI3i8vFaAWh5w4goiJ4x9</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>circles</string>
+			</array>
+			<key>CFBundleURLName</key>
+			<string>com.example.circles</string>
+		</dict>
+	</array>
 </dict>
 </plist>

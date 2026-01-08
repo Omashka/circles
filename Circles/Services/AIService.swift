@@ -8,6 +8,7 @@ import Foundation
 import os.log
 
 /// Service for interacting with Gemini AI API
+/// Uses backend API if configured, otherwise falls back to direct Gemini API calls
 @MainActor
 class AIService: ObservableObject {
     static let shared = AIService()
@@ -15,23 +16,36 @@ class AIService: ObservableObject {
     private let logger = Logger(subsystem: "com.circles.app", category: "AIService")
     private let apiKey: String
     private let baseURL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent"
+    private let backendService: BackendAIService?
     
     // MARK: - Initialization
     
     init(apiKey: String? = nil) {
-        // Get API key from environment variable or Info.plist
-        if let key = apiKey {
-            self.apiKey = key
-        } else if let key = ProcessInfo.processInfo.environment["GEMINI_API_KEY"] {
-            self.apiKey = key
-        } else if let path = Bundle.main.path(forResource: "Info", ofType: "plist"),
-                  let plist = NSDictionary(contentsOfFile: path),
-                  let key = plist["GEMINI_API_KEY"] as? String {
-            self.apiKey = key
+        // Initialize backend service if configured
+        if Config.useBackend {
+            self.backendService = BackendAIService(
+                baseURL: Config.backendBaseURL,
+                apiKey: Config.backendAPIKey
+            )
+            self.apiKey = "" // Not needed when using backend
+            logger.info("Using backend API for AI operations")
         } else {
-            // Fallback: empty key (will fail gracefully)
-            self.apiKey = ""
-            logger.warning("Gemini API key not found. AI features will not work.")
+            self.backendService = nil
+            // Get API key from environment variable or Info.plist
+            if let key = apiKey {
+                self.apiKey = key
+            } else if let key = ProcessInfo.processInfo.environment["GEMINI_API_KEY"] {
+                self.apiKey = key
+            } else if let path = Bundle.main.path(forResource: "Info", ofType: "plist"),
+                      let plist = NSDictionary(contentsOfFile: path),
+                      let key = plist["GEMINI_API_KEY"] as? String {
+                self.apiKey = key
+            } else {
+                // Fallback: empty key (will fail gracefully)
+                self.apiKey = ""
+                logger.warning("Gemini API key not found. AI features will not work.")
+            }
+            logger.info("Using direct Gemini API (backend not configured)")
         }
     }
     
@@ -42,6 +56,15 @@ class AIService: ObservableObject {
         transcription: String,
         contactName: String? = nil
     ) async throws -> VoiceNoteSummary {
+        // Use backend if configured
+        if let backend = backendService {
+            return try await backend.summarizeVoiceNote(
+                transcription: transcription,
+                contactName: contactName
+            )
+        }
+        
+        // Fallback to direct Gemini API
         logger.info("API key present: \(!self.apiKey.isEmpty), length: \(self.apiKey.count)")
         
         guard !apiKey.isEmpty else {
@@ -108,6 +131,166 @@ class AIService: ObservableObject {
         return summary
     }
     
+    // MARK: - Contact Detection and Summarization
+    
+    /// Detect contact from text and generate summary
+    func detectContactAndSummarize(
+        text: String,
+        contacts: [Contact]
+    ) async throws -> ContactDetectionResult {
+        // Use backend if configured
+        if let backend = backendService {
+            return try await backend.detectContactAndSummarize(
+                text: text,
+                contacts: contacts
+            )
+        }
+        
+        // Fallback to direct Gemini API
+        guard !apiKey.isEmpty else {
+            throw AIError.apiKeyMissing
+        }
+        
+        let prompt = buildContactDetectionPrompt(text: text, contacts: contacts)
+        
+        let requestBody: [String: Any] = [
+            "contents": [
+                [
+                    "parts": [
+                        ["text": prompt]
+                    ]
+                ]
+            ],
+            "generationConfig": [
+                "temperature": 0.7,
+                "topK": 40,
+                "topP": 0.95,
+                "maxOutputTokens": 1024
+            ]
+        ]
+        
+        let url = URL(string: "\(baseURL)?key=\(apiKey)")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = try JSONSerialization.data(withJSONObject: requestBody)
+        
+        logger.info("Sending contact detection request to Gemini API")
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+        
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw AIError.invalidResponse
+        }
+        
+        guard (200...299).contains(httpResponse.statusCode) else {
+            let errorMessage = String(data: data, encoding: .utf8) ?? "Unknown error"
+            logger.error("API request failed with status \(httpResponse.statusCode): \(errorMessage, privacy: .public)")
+            throw AIError.apiError(httpResponse.statusCode, errorMessage)
+        }
+        
+        let apiResponse = try JSONDecoder().decode(GeminiResponse.self, from: data)
+        
+        guard let text = apiResponse.candidates.first?.content.parts.first?.text else {
+            throw AIError.noContentInResponse
+        }
+        
+        return try parseContactDetectionResponse(text)
+    }
+    
+    private func buildContactDetectionPrompt(text: String, contacts: [Contact]) -> String {
+        let contactList = contacts.map { contact in
+            "- \(contact.name ?? "Unknown")"
+        }.joined(separator: "\n")
+        
+        return """
+        Analyze the following text and:
+        1. Detect which contact (if any) this text is about from this list:
+        \(contactList.isEmpty ? "No contacts available" : contactList)
+        
+        2. Generate a summary and extract structured data (same format as voice notes)
+        
+        3. Provide a confidence score (0.0 to 1.0) for the contact match
+        
+        Format your response as JSON:
+        {
+          "detectedContactName": "Name of contact or null",
+          "confidence": 0.85,
+          "summary": "Brief summary of the conversation",
+          "interests": ["interest1", "interest2"],
+          "events": ["event1", "event2"],
+          "dates": ["2024-12-25"],
+          "workInfo": "Job title and company if mentioned",
+          "topicsToAvoid": ["topic1"],
+          "familyDetails": "Family information if mentioned",
+          "travelNotes": "Travel preferences or notes",
+          "religiousEvents": ["event1"],
+          "birthday": "YYYY-MM-DD or null"
+        }
+        
+        Text to analyze:
+        \(text)
+        """
+    }
+    
+    private func parseContactDetectionResponse(_ text: String) throws -> ContactDetectionResult {
+        // Try to extract JSON from the response
+        let jsonPattern = #"\{[^}]+\}"#
+        let regex = try NSRegularExpression(pattern: jsonPattern, options: [.dotMatchesLineSeparators])
+        let range = NSRange(text.startIndex..<text.endIndex, in: text)
+        
+        guard let match = regex.firstMatch(in: text, options: [], range: range),
+              let jsonRange = Range(match.range, in: text) else {
+            // Fallback: no contact detected, just summarize
+            let summary = try parseSummaryResponse(text)
+            return ContactDetectionResult(
+                detectedContactName: nil,
+                confidence: 0.0,
+                summary: summary
+            )
+        }
+        
+        let jsonString = String(text[jsonRange])
+        guard let jsonData = jsonString.data(using: .utf8) else {
+            throw AIError.invalidResponseFormat
+        }
+        
+        let decoder = JSONDecoder()
+        let parsed = try decoder.decode(ParsedContactDetection.self, from: jsonData)
+        
+        // Parse dates
+        let dateFormatter = ISO8601DateFormatter()
+        dateFormatter.formatOptions = [.withFullDate]
+        let dates = parsed.dates.compactMap { dateFormatter.date(from: $0) }
+        
+        // Parse birthday
+        let birthday: Date?
+        if let birthdayString = parsed.birthday, !birthdayString.isEmpty {
+            birthday = dateFormatter.date(from: birthdayString)
+        } else {
+            birthday = nil
+        }
+        
+        let summary = VoiceNoteSummary(
+            summary: parsed.summary,
+            interests: parsed.interests,
+            events: parsed.events,
+            dates: dates,
+            workInfo: parsed.workInfo?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false ? parsed.workInfo : nil,
+            topicsToAvoid: parsed.topicsToAvoid?.filter { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty },
+            familyDetails: parsed.familyDetails?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false ? parsed.familyDetails : nil,
+            travelNotes: parsed.travelNotes?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false ? parsed.travelNotes : nil,
+            religiousEvents: parsed.religiousEvents?.filter { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty },
+            birthday: birthday
+        )
+        
+        return ContactDetectionResult(
+            detectedContactName: parsed.detectedContactName,
+            confidence: parsed.confidence,
+            summary: summary
+        )
+    }
+    
     // MARK: - Gift Idea Generation
     
     /// Generate gift ideas for a contact based on their interests and information
@@ -115,6 +298,15 @@ class AIService: ObservableObject {
         for contact: Contact,
         budget: String? = nil
     ) async throws -> [String] {
+        // Use backend if configured
+        if let backend = backendService {
+            return try await backend.generateGiftIdeas(
+                for: contact,
+                budget: budget
+            )
+        }
+        
+        // Fallback to direct Gemini API
         guard !apiKey.isEmpty else {
             throw AIError.apiKeyMissing
         }
@@ -414,6 +606,27 @@ struct VoiceNoteSummary {
 }
 
 private struct ParsedSummary: Codable {
+    let summary: String
+    let interests: [String]
+    let events: [String]
+    let dates: [String]
+    let workInfo: String?
+    let topicsToAvoid: [String]?
+    let familyDetails: String?
+    let travelNotes: String?
+    let religiousEvents: [String]?
+    let birthday: String?
+}
+
+struct ContactDetectionResult {
+    let detectedContactName: String?
+    let confidence: Double
+    let summary: VoiceNoteSummary
+}
+
+private struct ParsedContactDetection: Codable {
+    let detectedContactName: String?
+    let confidence: Double
     let summary: String
     let interests: [String]
     let events: [String]

@@ -240,6 +240,11 @@ class DataManager: ObservableObject {
         return note
     }
     
+    func saveUnassignedNote(_ note: UnassignedNote) async throws {
+        try persistence.save()
+        logger.info("Unassigned note saved")
+    }
+    
     func assignNote(_ note: UnassignedNote, to contact: Contact) async throws {
         // Create interaction from note
         _ = try await createInteraction(

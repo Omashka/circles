@@ -25,12 +25,49 @@ struct CirclesApp: App {
         #endif
     }
     
+    @State private var showingInbox = false
+    @State private var importedText: String?
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environment(\.managedObjectContext, persistenceController.viewContext)
                 .environmentObject(dataManager)
                 .environmentObject(viewModel)
+                .onOpenURL { url in
+                    handleURL(url)
+                }
+                .sheet(isPresented: $showingInbox) {
+                    InboxView()
+                        .environmentObject(dataManager)
+                }
+        }
+    }
+    
+    // MARK: - URL Handling
+    
+    private func handleURL(_ url: URL) {
+        guard url.scheme == "circles",
+              url.host == "import",
+              let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+              let textItem = components.queryItems?.first(where: { $0.name == "text" }),
+              let text = textItem.value?.removingPercentEncoding else {
+            return
+        }
+        
+        // Process imported text
+        Task { @MainActor in
+            do {
+                try await ImportService.shared.processImportedText(
+                    text,
+                    source: "shortcut_import",
+                    dataManager: dataManager
+                )
+                // Show inbox to review if needed
+                showingInbox = true
+            } catch {
+                print("Error processing imported text: \(error)")
+            }
         }
     }
 }

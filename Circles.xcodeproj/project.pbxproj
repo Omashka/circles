@@ -39,10 +39,14 @@
 		F4C9055126139A8900252758 /* VoiceNoteViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C9055226139A8900252758 /* VoiceNoteViewModel.swift */; };
 		F4C9055326139A8900252759 /* VoiceNoteRecordingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C9055426139A8900252759 /* VoiceNoteRecordingView.swift */; };
 		F4C9055726139A8900252761 /* AIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C9055826139A8900252761 /* AIService.swift */; };
+		F4C9057026139A8900252770 /* BackendAIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C9057126139A8900252770 /* BackendAIService.swift */; };
 		F4C9055926139A8900252762 /* OfflineQueueManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C9055A26139A8900252762 /* OfflineQueueManager.swift */; };
 		F4C9055B26139A8900252763 /* VoiceNoteSummaryEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C9055C26139A8900252763 /* VoiceNoteSummaryEditView.swift */; };
 		F4C9055D26139A8900252764 /* GiftIdeasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C9055E26139A8900252764 /* GiftIdeasView.swift */; };
 		F4C9056126139A8900252766 /* ProfileUpdateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C9056226139A8900252766 /* ProfileUpdateService.swift */; };
+		F4C9056326139A8900252767 /* ImportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C9056426139A8900252767 /* ImportService.swift */; };
+		F4C9056526139A8900252768 /* InboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C9056626139A8900252768 /* InboxView.swift */; };
+		F4C9056726139A8900252769 /* ShortcutsOnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C9056826139A8900252769 /* ShortcutsOnboardingView.swift */; };
 		F4C9052926139A8900252740 /* ContactCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C9052A26139A8900252740 /* ContactCard.swift */; };
 		F4C9052B26139A8900252741 /* SampleDataGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C9052C26139A8900252741 /* SampleDataGenerator.swift */; };
 		F4C9052D26139A8900252742 /* DebugHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C9052E26139A8900252742 /* DebugHelpers.swift */; };
@@ -119,10 +123,14 @@
 		F4C9054C26139A8900252755 /* InteractionEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UI/Screens/InteractionEditView.swift"; sourceTree = "<group>"; };
 		F4C9055426139A8900252759 /* VoiceNoteRecordingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UI/Screens/VoiceNoteRecordingView.swift"; sourceTree = "<group>"; };
 		F4C9055826139A8900252761 /* AIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Services/AIService.swift"; sourceTree = "<group>"; };
+		F4C9057126139A8900252770 /* BackendAIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Services/BackendAIService.swift"; sourceTree = "<group>"; };
 		F4C9055A26139A8900252762 /* OfflineQueueManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Services/OfflineQueueManager.swift"; sourceTree = "<group>"; };
 		F4C9055C26139A8900252763 /* VoiceNoteSummaryEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UI/Screens/VoiceNoteSummaryEditView.swift"; sourceTree = "<group>"; };
 		F4C9055E26139A8900252764 /* GiftIdeasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UI/Screens/GiftIdeasView.swift"; sourceTree = "<group>"; };
 		F4C9056226139A8900252766 /* ProfileUpdateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Services/ProfileUpdateService.swift"; sourceTree = "<group>"; };
+		F4C9056426139A8900252767 /* ImportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Services/ImportService.swift"; sourceTree = "<group>"; };
+		F4C9056626139A8900252768 /* InboxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UI/Screens/InboxView.swift"; sourceTree = "<group>"; };
+		F4C9056826139A8900252769 /* ShortcutsOnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UI/Screens/ShortcutsOnboardingView.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin XCVersionGroup section */
@@ -190,8 +198,10 @@
 				F4C9051026139A8900252727 /* CloudKitSyncMonitor.swift */,
 				F4C9055026139A8900252757 /* VoiceNoteRecorder.swift */,
 				F4C9055826139A8900252761 /* AIService.swift */,
+				F4C9057126139A8900252770 /* BackendAIService.swift */,
 				F4C9055A26139A8900252762 /* OfflineQueueManager.swift */,
 				F4C9056226139A8900252766 /* ProfileUpdateService.swift */,
+				F4C9056426139A8900252767 /* ImportService.swift */,
 				F4C9052C26139A8900252741 /* SampleDataGenerator.swift */,
 				F4C9052E26139A8900252742 /* DebugHelpers.swift */,
 				F4C9050726139A8900252722 /* ContactExtensions.swift */,
@@ -215,6 +225,8 @@
 				F4C9055426139A8900252759 /* VoiceNoteRecordingView.swift */,
 				F4C9055C26139A8900252763 /* VoiceNoteSummaryEditView.swift */,
 				F4C9055E26139A8900252764 /* GiftIdeasView.swift */,
+				F4C9056626139A8900252768 /* InboxView.swift */,
+				F4C9056826139A8900252769 /* ShortcutsOnboardingView.swift */,
 				F4C9050B26139A8900252724 /* CirclesDataModel.xcdatamodeld */,
 				89EAB87C25880278004264D2 /* Assets.xcassets */,
 				89EAB88125880278004264D2 /* Info.plist */,
@@ -374,11 +386,15 @@
 				F4C9055326139A8900252759 /* VoiceNoteRecordingView.swift in Sources */,
 				F4C9055B26139A8900252763 /* VoiceNoteSummaryEditView.swift in Sources */,
 				F4C9055D26139A8900252764 /* GiftIdeasView.swift in Sources */,
+				F4C9056526139A8900252768 /* InboxView.swift in Sources */,
+				F4C9056726139A8900252769 /* ShortcutsOnboardingView.swift in Sources */,
 				F4C9052726139A8900252739 /* ContactsViewModel.swift in Sources */,
 				F4C9054926139A8900252754 /* InteractionViewModel.swift in Sources */,
 				F4C9055726139A8900252761 /* AIService.swift in Sources */,
+				F4C9057026139A8900252770 /* BackendAIService.swift in Sources */,
 				F4C9055926139A8900252762 /* OfflineQueueManager.swift in Sources */,
 				F4C9056126139A8900252766 /* ProfileUpdateService.swift in Sources */,
+				F4C9056326139A8900252767 /* ImportService.swift in Sources */,
 				F4C9055126139A8900252758 /* VoiceNoteViewModel.swift in Sources */,
 				F4C9052926139A8900252740 /* ContactCard.swift in Sources */,
 				F4C9052B26139A8900252741 /* SampleDataGenerator.swift in Sources */,

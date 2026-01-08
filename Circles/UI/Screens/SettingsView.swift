@@ -9,6 +9,7 @@ import SwiftUI
 struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject var dataManager: DataManager
+    @State private var showingShortcutsOnboarding = false
     
     var body: some View {
         NavigationStack {
@@ -68,6 +69,14 @@ struct SettingsView: View {
                             )
                             
                             settingsRow(
+                                icon: "app.badge",
+                                title: "Shortcuts Setup",
+                                subtitle: "Import messages automatically"
+                            ) {
+                                showingShortcutsOnboarding = true
+                            }
+                            
+                            settingsRow(
                                 icon: "questionmark.circle.fill",
                                 title: "Help & Support",
                                 subtitle: "Get assistance"
@@ -96,14 +105,17 @@ struct SettingsView: View {
                     }
                 }
             }
+            .sheet(isPresented: $showingShortcutsOnboarding) {
+                ShortcutsOnboardingView()
+            }
         }
     }
     
     // MARK: - Settings Row
     
-    private func settingsRow(icon: String, title: String, subtitle: String) -> some View {
+    private func settingsRow(icon: String, title: String, subtitle: String, action: (() -> Void)? = nil) -> some View {
         Button {
-            // Navigation will be implemented in later prompts
+            action?()
         } label: {
             GlassCard(padding: 16) {
                 HStack(spacing: 16) {

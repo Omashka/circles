@@ -4,6 +4,7 @@
 //
 
 import SwiftUI
+import Foundation
 
 /// Main view for the People tab showing contact list
 struct PeopleView: View {
@@ -12,6 +13,8 @@ struct PeopleView: View {
     
     @State private var showingSettings = false
     @State private var showingAddContact = false
+    @State private var showingInbox = false
+    @State private var unassignedNotesCount = 0
     
     var body: some View {
         NavigationStack {
@@ -37,19 +40,40 @@ struct PeopleView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     HStack(spacing: 12) {
+                        // Inbox button
+                        Button {
+                            showingInbox = true
+                        } label: {
+                            ZStack(alignment: .topTrailing) {
+                                Image(systemName: "tray.fill")
+                                    .font(.system(size: 18, weight: .medium))
+                                    .foregroundStyle(.secondary)
+                                
+                                if unassignedNotesCount > 0 {
+                                    Text("\(unassignedNotesCount)")
+                                        .font(.system(size: 10, weight: .bold))
+                                        .foregroundStyle(.white)
+                                        .padding(4)
+                                        .background(Color.red)
+                                        .clipShape(Circle())
+                                        .offset(x: 8, y: -8)
+                                }
+                            }
+                        }
+                        
                         // Settings button
-                    Button {
-                        showingSettings = true
-                    } label: {
-                        Image(systemName: "gearshape.fill")
+                        Button {
+                            showingSettings = true
+                        } label: {
+                            Image(systemName: "gearshape.fill")
                                 .font(.system(size: 18, weight: .medium))
-                            .foregroundStyle(.secondary)
+                                .foregroundStyle(.secondary)
                         }
                         
                         // Add contact button
-                    Button {
-                        showingAddContact = true
-                    } label: {
+                        Button {
+                            showingAddContact = true
+                        } label: {
                             Image(systemName: "plus.circle.fill")
                                 .font(.system(size: 22, weight: .medium))
                                 .foregroundStyle(Color.glassBlue)
@@ -64,12 +88,22 @@ struct PeopleView: View {
                 ContactEditView()
                     .environmentObject(dataManager)
             }
+            .sheet(isPresented: $showingInbox) {
+                InboxView()
+                    .environmentObject(dataManager)
+            }
             .navigationDestination(for: Contact.self) { contact in
                 ContactDetailView(contact: contact)
                     .environmentObject(dataManager)
             }
             .task {
                 await viewModel.loadContacts()
+                await updateUnassignedNotesCount()
+            }
+            .onReceive(NotificationCenter.default.publisher(for: .NSManagedObjectContextDidSave)) { _ in
+                Task {
+                    await updateUnassignedNotesCount()
+                }
             }
         }
     }
@@ -197,6 +231,13 @@ struct PeopleView: View {
                 .padding()
             }
         }
+    }
+    
+    // MARK: - Helper Methods
+    
+    private func updateUnassignedNotesCount() async {
+        let notes = await dataManager.fetchUnassignedNotes()
+        unassignedNotesCount = notes.count
     }
 }
 
