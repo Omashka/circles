@@ -30,6 +30,7 @@ class VoiceNoteRecorder: NSObject, ObservableObject {
     // Callbacks
     var onDurationReached: (() -> Void)?
     var onTranscriptionUpdate: ((String) -> Void)?
+    var onRecordingStopped: ((String) -> Void)? // Called when recording stops with final transcription
     
     // MARK: - Initialization
     
@@ -128,7 +129,10 @@ class VoiceNoteRecorder: NSObject, ObservableObject {
             if let error = error {
                 Task { @MainActor in
                     self.errorMessage = error.localizedDescription
-                    self.stopRecording()
+                    // Call completion with current transcription even on error
+                    let finalTranscription = self.transcription
+                    self.stopRecordingInternal()
+                    self.onRecordingStopped?(finalTranscription)
                 }
                 return
             }
@@ -140,10 +144,13 @@ class VoiceNoteRecorder: NSObject, ObservableObject {
                     self.onTranscriptionUpdate?(newTranscription)
                 }
                 
-                // If final result, stop recording
+                // If final result, stop recording and call completion
                 if result.isFinal {
                     Task { @MainActor in
-                        self.stopRecording()
+                        let finalTranscription = result.bestTranscription.formattedString
+                        self.transcription = finalTranscription
+                        self.stopRecordingInternal()
+                        self.onRecordingStopped?(finalTranscription)
                     }
                 }
             }
@@ -155,8 +162,16 @@ class VoiceNoteRecorder: NSObject, ObservableObject {
         startTimer()
     }
     
-    /// Stop recording
+    /// Stop recording (public method - triggers final result callback)
     func stopRecording() {
+        // End recognition request to trigger final result
+        recognitionRequest?.endAudio()
+        // Don't cancel task yet - wait for final result in callback
+        // The recognition task callback will call stopRecordingInternal() when final result arrives
+    }
+    
+    /// Internal method to actually stop recording and clean up
+    private func stopRecordingInternal() {
         // Stop timer
         timer?.invalidate()
         timer = nil
@@ -165,11 +180,10 @@ class VoiceNoteRecorder: NSObject, ObservableObject {
         audioEngine?.stop()
         audioEngine?.inputNode.removeTap(onBus: 0)
         
-        // End recognition request
-        recognitionRequest?.endAudio()
+        // Clean up recognition request
         recognitionRequest = nil
         
-        // Cancel recognition task
+        // Cancel recognition task (now safe to cancel since we have final result)
         recognitionTask?.cancel()
         recognitionTask = nil
         
@@ -182,9 +196,10 @@ class VoiceNoteRecorder: NSObject, ObservableObject {
     
     /// Cancel recording (discard all data)
     func cancelRecording() {
-        stopRecording()
+        stopRecordingInternal()
         transcription = ""
         errorMessage = nil
+        onRecordingStopped?("") // Call with empty string to indicate cancellation
     }
     
     // MARK: - Timer Management

@@ -61,20 +61,17 @@ struct VoiceNoteRecordingView: View {
                     // Stop timer
                     updateTimer?.invalidate()
                     updateTimer = nil
-                    
-                    // When recording stops, wait a moment then show save confirmation
-                    Task {
-                        // Wait for transcription to finalize
-                        try? await Task.sleep(nanoseconds: 300_000_000) // 0.3 seconds
-                        viewModel.updateStateFromRecorder()
-                        
-                        // Show alert if we have transcription
-                        if !viewModel.transcription.isEmpty {
-                            showingSaveConfirmation = true
-                        } else {
-                            // No transcription, dismiss
-                            dismiss()
-                        }
+                }
+            }
+            .onReceive(NotificationCenter.default.publisher(for: .recordingStopped)) { notification in
+                // Recording has stopped with final transcription
+                if let transcription = notification.userInfo?["transcription"] as? String {
+                    // Show alert if we have transcription
+                    if !transcription.isEmpty {
+                        showingSaveConfirmation = true
+                    } else {
+                        // No transcription, dismiss
+                        dismiss()
                     }
                 }
             }

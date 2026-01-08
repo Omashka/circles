@@ -7,6 +7,11 @@ import SwiftUI
 import AVFoundation
 import Speech
 import os.log
+import Foundation
+
+extension Notification.Name {
+    static let recordingStopped = Notification.Name("recordingStopped")
+}
 
 /// ViewModel managing voice note recording state and operations
 @MainActor
@@ -47,7 +52,17 @@ class VoiceNoteViewModel: ObservableObject {
         
         recorder.onDurationReached = { [weak self] in
             Task { @MainActor in
-                await self?.stopRecording()
+                self?.stopRecording()
+            }
+        }
+        
+        // Setup callback for when recording stops with final transcription
+        recorder.onRecordingStopped = { [weak self] finalTranscription in
+            Task { @MainActor in
+                self?.transcription = finalTranscription
+                self?.isRecording = false
+                // Notify that recording has stopped with final transcription
+                NotificationCenter.default.post(name: .recordingStopped, object: nil, userInfo: ["transcription": finalTranscription])
             }
         }
     }
@@ -87,8 +102,7 @@ class VoiceNoteViewModel: ObservableObject {
     /// Stop recording and save
     func stopRecording() {
         recorder.stopRecording()
-        // Force immediate state update to ensure transcription is synced
-        updateStateFromRecorder()
+        // State will be updated via onRecordingStopped callback
     }
     
     /// Cancel recording (discard)
